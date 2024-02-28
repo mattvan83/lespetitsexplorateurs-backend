@@ -23,6 +23,10 @@ const userSchema = mongoose.Schema({
   username: String,
   password: String,
   token: String,
+  image: {
+    data: Buffer, // Use Buffer data type to store binary image data
+    contentType: String, // Store the content type of the image ('image/jpeg', 'image/png')
+  },
   followed: {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
     required: function () {
