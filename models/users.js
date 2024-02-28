@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
 
 const OrganizerDetailsSchema = new mongoose.Schema({
+  name: String,
+  function: String,
   address: String,
   postalCode: Number,
   city: String,
-  locationName: {
-    type: String,
-    required: false,
-    default: null,
-  },
+  latitude: Number,
+  longitude: Number,
   followed: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -24,12 +23,12 @@ const userSchema = mongoose.Schema({
   username: String,
   password: String,
   token: String,
-  followed: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users", // Reference to the users collection itself
+  followed: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
+    required: function () {
+      return !this.isOrganizer; // Make parent following required only if isOrganizer is false
     },
-  ],
+  },
   isOrganizer: {
     type: Boolean,
     required: true,

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const activitySchema = mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
+  organizer: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
   createdAt: Date,
   name: String,
   description: String,
@@ -32,13 +33,22 @@ const activitySchema = mongoose.Schema({
   locationName: {
     type: String,
     required: false,
-    default: null,
+    default: "",
   },
+  latitude: Number,
+  longitude: Number,
   date: Date,
+  isRecurrent: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   recurrence: {
     type: String,
     enum: ["Daily", "Weekly", "Bimonthly", "Monthly", "Yearly"],
-    required: true,
+    required: function () {
+      return this.isRecurrent; // Make recurrence required only if isRecurrent is true
+    },
   },
   image: {
     data: Buffer, // Use Buffer data type to store binary image data
