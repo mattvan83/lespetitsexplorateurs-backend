@@ -28,7 +28,7 @@ const activitySchema = mongoose.Schema({
     },
   ],
   address: String,
-  postalCode: Number,
+  postalCode: String,
   city: String,
   locationName: {
     type: String,

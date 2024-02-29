@@ -1,0 +1,292 @@
+[
+  {
+    "email": "Norwood.Hegmann4@yahoo.com",
+    "username": "Lyda_Mosciski",
+    "password": "$2b$10$VkQRe6493uKwHUAZ5mfusuSRjEDQE8eyXPv0/xI5Gwz29bz5y8S.W",
+    "token": "dKT_2XzI5NszDBfiVgiKFOZKYU8iLOCF",
+    "image": "../assets/test/profil1.png",
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Bechtelar - Gleason",
+      "function": "Dynamic Metrics Assistant",
+      "address": "359 Effertz Village",
+      "postalCode": "07100",
+      "latitude": 45.2393,
+      "longitude": 4.6671,
+      "city": "Annonay",
+      "followed": [],
+      "About": "Perspiciatis assumenda pariatur soluta quod. Repellat et porro ducimus vel assumenda nam. Suscipit aut id qui est adipisci sequi mollitia ea.",
+      "activities": []
+    }
+  },
+  {
+    "email": "Neva_Hayes68@hotmail.com",
+    "username": "Brenda32",
+    "password": "$2b$10$88yo2jJGrkHXCrTHpDMl.exITscawy98pI0VUu/SvsuT59WQHc4mS",
+    "token": "YQ0yH7HRPHfnkaBYOKY5UKxoIz8nX9VQ",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "isOrganizer": false
+  },
+  {
+    "email": "Agnes.Schmidt53@yahoo.com",
+    "username": "Alexys_Dicki49",
+    "password": "$2b$10$wZeqMboOVh5JqGcNQFc1j.zcYl8gJOCp9WBfgDEqDsTq25CFdnvDO",
+    "token": "g7tNhThALJCJ77_p77xfzOBNd6_ribSf",
+    "image": "../assets/test/profil2.png",
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "D'Amore Group",
+      "function": "Senior Integration Facilitator",
+      "address": "47249 Marquardt Center",
+      "postalCode": "07400",
+      "latitude": 44.5504,
+      "longitude": 4.7039,
+      "city": "Le Teil",
+      "followed": [],
+      "About": "Nobis voluptas molestiae ad dolore eligendi rerum ab. Ut officiis quisquam minima in repellat. Et fugit esse.",
+      "activities": []
+    }
+  },
+  {
+    "email": "Emelie.Green@yahoo.com",
+    "username": "Mustafa21",
+    "password": "$2b$10$3CUNDKXn5FQcAJEp.y6Ww./n4bNDWy7XGFFIrGDXxWavB6JgopMaS",
+    "token": "8_xCd0DNZd3d2otUYYlaBt6GmPtLM3PK",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "isOrganizer": false
+  },
+  {
+    "email": "Dangelo.Kerluke@gmail.com",
+    "username": "Salvador38",
+    "password": "$2b$10$DIMw4iM5n6Lo0PqNRWjeyOLij2Oe.I0EGATpa1nD0/ApncGB//fcS",
+    "token": "NYSB2xlLTZbSYzDG4__0KWMO1jWAinmQ",
+    "image": "../assets/test/profil1.png",
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Schimmel - Wiza",
+      "function": "Principal Applications Manager",
+      "address": "591 Darion Drive",
+      "postalCode": "26270",
+      "latitude": 44.7518,
+      "longitude": 4.8238,
+      "city": "Loriol-sur-Drôme",
+      "followed": [],
+      "About": "Beatae inventore ea odit in maxime tenetur aut dolor mollitia. Qui totam nulla qui. Consequatur nesciunt delectus id ut. Corporis animi omnis soluta iste vel nemo explicabo ea. Voluptatem labore itaque. Repudiandae nesciunt quidem id natus ratione unde.",
+      "activities": []
+    }
+  },
+  {
+    "email": "Conor.Mraz69@yahoo.com",
+    "username": "Dixie24",
+    "password": "$2b$10$z7m5cj3i1g4y3SIe2uVO.eIlfmKrT1ACtSTxDgPkbTRS0mMnGEqzC",
+    "token": "umf8FH6Du6foQQxB4OmBy0fHNlSRtil2",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "isOrganizer": false
+  },
+  {
+    "email": "Valentina61@yahoo.com",
+    "username": "Gilberto_Schuster11",
+    "password": "$2b$10$oqHPXElYXyViF.R390sCPudb9ZHUJ6V7I2HEPPnEgoRI.fqUxcmfC",
+    "token": "XfCf_RPeSfroFx_wY_q9-EG5-eoChilz",
+    "image": "../assets/test/profil2.png",
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Witting, Hirthe and Fritsch",
+      "function": "Legacy Markets Liaison",
+      "address": "58999 Goodwin Union",
+      "postalCode": "26100",
+      "latitude": 45.0434,
+      "longitude": 5.0505,
+      "city": "Romans-sur-Isère",
+      "followed": [],
+      "About": "Aut autem sunt aut. Necessitatibus ratione soluta voluptatem sequi ut rerum id. Consequuntur at omnis consectetur neque sint qui voluptatibus nam corporis. Voluptate facere aut. Occaecati suscipit nulla nam quaerat minus at libero harum amet.",
+      "activities": []
+    }
+  },
+  {
+    "email": "Samanta.Goyette3@hotmail.com",
+    "username": "Nick_Roberts94",
+    "password": "$2b$10$2qo6YcuUyzXdUDTkIYuKUupOY1sR6JjACtMxIdENsrE4kP0o9HNd2",
+    "token": "ApCc20RcuB27JFWs-JNS_9I00m8KoLPX",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "isOrganizer": false
+  },
+  {
+    "email": "Destiney.Armstrong@gmail.com",
+    "username": "Walton_OKeefe",
+    "password": "$2b$10$ewpwtFzr3T/MhokJjAPYVeEmvbXemMBS7MJUgKBdiLOHgADHLMzq2",
+    "token": "_AuEc4Lw5I_YcvqtN0BvRm_-LGiDgXVc",
+    "image": "../assets/test/profil2.png",
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Heathcote - Bauch",
+      "function": "Principal Integration Coordinator",
+      "address": "560 Sid Roads",
+      "postalCode": "26250",
+      "latitude": 44.7293,
+      "longitude": 4.8312,
+      "city": "Livron-sur-Drôme",
+      "followed": [],
+      "About": "Maiores praesentium quia molestias ratione nulla libero. Libero voluptatibus facere. Deserunt eum officia molestiae quas.",
+      "activities": []
+    }
+  },
+  {
+    "email": "Juvenal_Farrell@hotmail.com",
+    "username": "Emmy16",
+    "password": "$2b$10$NXHIyYQHGpO1498.lxAYx./g/zsRnOChDjwngiU/1LP9BPTy2lNEm",
+    "token": "W77liXrRvm5moV8BX7-0l0KRwo7zZ4Q-",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "isOrganizer": false
+  },
+  {
+    "email": "Marley.Quitzon@gmail.com",
+    "username": "Maynard.Welch99",
+    "password": "$2b$10$W8hCl7CZD2rSQzDIRdPyJup5GyVW8uhPqUz3h4YhSkMvKwxOqNPBK",
+    "token": "NxXt9j7Yb-wnWBBjhhIlm4E6oMhTFl4s",
+    "image": "../assets/test/profil1.png",
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Bednar LLC",
+      "function": "Direct Security Engineer",
+      "address": "985 Jace Glens",
+      "postalCode": "26270",
+      "latitude": 44.7518,
+      "longitude": 4.8238,
+      "city": "Loriol-sur-Drôme",
+      "followed": [],
+      "About": "Perferendis animi delectus similique aliquam. Eos quo vero ut aut minus ex. Distinctio deserunt sequi quisquam et laudantium. Et architecto aut velit neque omnis sapiente asperiores vel ducimus. Atque natus sit dicta autem vel cupiditate. Vel adipisci sequi nesciunt nulla quaerat eum nihil nam.",
+      "activities": []
+    }
+  },
+  {
+    "email": "Idella.Farrell@hotmail.com",
+    "username": "Rosemarie37",
+    "password": "$2b$10$UAnjsSEJXCHTkpCGLkaOM.h2v/VFcjm7MLkjyHjPQox0uH1t86mom",
+    "token": "3BHYPvdW-qXzkBKwoNhpsTHRPtuidPYV",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "isOrganizer": false
+  },
+  {
+    "email": "Nash.Lynch37@gmail.com",
+    "username": "Shania.Padberg",
+    "password": "$2b$10$XnQkzv8ndypUJgzpXj428.yb4989KMfqXoIFjRXw25ZSbJ8Vkkz7O",
+    "token": "o3CKu6cScWoAhvpw58WP8IedD6O5yb54",
+    "image": "../assets/test/profil2.png",
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Block - Fahey",
+      "function": "Dynamic Assurance Executive",
+      "address": "63614 Cortney Gateway",
+      "postalCode": "26200",
+      "latitude": 44.5569,
+      "longitude": 4.7496,
+      "city": "Montélimar",
+      "followed": [],
+      "About": "Molestiae et commodi id hic a. Dolorem dolorum et. Exercitationem saepe laudantium ut odio nihil. Est est vero nobis perspiciatis. Ullam placeat dolor sit amet quia ab nihil molestiae vero.",
+      "activities": []
+    }
+  },
+  {
+    "email": "Esteban_Carter26@gmail.com",
+    "username": "Demetrius43",
+    "password": "$2b$10$RPNIGs6i4ZI6nk/XlVQy9.N7gl4k0/XG9koa0gtjuEjEziVdGHI2S",
+    "token": "LTr4xqWGhXTgzo8ywKnhpRuX6QLn_Vl3",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "isOrganizer": false
+  },
+  {
+    "email": "Felton96@gmail.com",
+    "username": "Andy2",
+    "password": "$2b$10$xHHGe/X6RBsJ4UhYsiEjaOcfvkr85QOheImdhT7t2kwZKRt7P2BJi",
+    "token": "NS_vQUu1nhZtuKa-iLgxxU5-OkVh8-7f",
+    "image": "../assets/test/profil2.png",
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Walker, Lindgren and Senger",
+      "function": "Direct Directives Director",
+      "address": "09069 Schmidt Common",
+      "postalCode": "26200",
+      "latitude": 44.5569,
+      "longitude": 4.7496,
+      "city": "Montélimar",
+      "followed": [],
+      "About": "Laboriosam amet dolore vel ab. Voluptatem dolorum voluptatibus. Inventore nemo eius saepe omnis autem aut perspiciatis perferendis fuga. Nulla ut eos dolorem sit quaerat et. Porro repellat odit.",
+      "activities": []
+    }
+  },
+  {
+    "email": "Jaron_Bartoletti@yahoo.com",
+    "username": "Elaina_Nader",
+    "password": "$2b$10$qVGIKkWe8IOdbQU.OZcMlu8g4q8QPwMYfkPUGThS8s0z4YKGWvqnS",
+    "token": "A4OXiZEdgvHL_gUqdc72KRjFeoS0QPOe",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "isOrganizer": false
+  },
+  {
+    "email": "Kaden_Corwin@gmail.com",
+    "username": "Gardner.Marks",
+    "password": "$2b$10$d5fZ1lnu29KCFDOaOysot.xWfuleiJliCPWrGxYM3Qio4CXjjaMHm",
+    "token": "9du05im2oF694iljFT3UX7m2DVP14XNt",
+    "image": "../assets/test/profil2.png",
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Hettinger, Marks and Buckridge",
+      "function": "Forward Response Consultant",
+      "address": "52967 Howe Court",
+      "postalCode": "07400",
+      "latitude": 44.5504,
+      "longitude": 4.7039,
+      "city": "Le Teil",
+      "followed": [],
+      "About": "Dolorem blanditiis ut error sit velit nemo quia quo explicabo. Excepturi nihil est vitae aut molestias voluptates placeat voluptatum. Officiis temporibus quae expedita et labore repellat. Omnis voluptas corporis voluptatem voluptas ut excepturi dolorem.",
+      "activities": []
+    }
+  },
+  {
+    "email": "Kurt46@gmail.com",
+    "username": "Mustafa.Cruickshank78",
+    "password": "$2b$10$/Se8lW9hrBsRWIEsa37nbO5ChkAgR/umVbHuClxKbXZ4qyceGraS2",
+    "token": "X599vdJLWhZA4AgwV21fc1Bu2Ac9_kvr",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "isOrganizer": false
+  },
+  {
+    "email": "Kamron_Kozey@yahoo.com",
+    "username": "Darren.Greenholt",
+    "password": "$2b$10$lJ10T59dpOaPw9oOaXZar.PdkiCeGq1E9KwSIWHDJUx7UrLrS8JcK",
+    "token": "av1iBOc8pIN03c0P5-fnwl4yvfhtF-t2",
+    "image": "../assets/test/profil1.png",
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Fisher, Olson and Hessel",
+      "function": "Senior Tactics Supervisor",
+      "address": "057 Will Turnpike",
+      "postalCode": "26700",
+      "latitude": 44.3749,
+      "longitude": 4.6981,
+      "city": "Pierrelatte",
+      "followed": [],
+      "About": "Voluptas aut quasi voluptate ex doloremque. Libero nesciunt sed repellendus pariatur aliquam qui laborum est. Ex consequuntur quo doloribus illo nihil quod voluptates. Qui adipisci et et consequatur alias deleniti.",
+      "activities": []
+    }
+  },
+  {
+    "email": "Emile18@gmail.com",
+    "username": "Arvel39",
+    "password": "$2b$10$mkUwRarhq0RtJmp9P7LQ1.DdrRELrBa1Wv1zlD4ubX0Sx3Zs8BDgO",
+    "token": "rxvQZCc2Gl39bvt7O9Ke0oIby4mZNHrN",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "isOrganizer": false
+  }
+]

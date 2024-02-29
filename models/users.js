@@ -4,7 +4,7 @@ const OrganizerDetailsSchema = new mongoose.Schema({
   name: String,
   function: String,
   address: String,
-  postalCode: Number,
+  postalCode: String,
   city: String,
   latitude: Number,
   longitude: Number,
