@@ -51,8 +51,8 @@ const activitySchema = mongoose.Schema({
     },
   },
   image: {
-    data: Buffer, // Use Buffer data type to store binary image data
-    contentType: String, // Store the content type of the image ('image/jpeg', 'image/png')
+    type: String,
+    required: false,
   },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
 });
