@@ -6,7 +6,7 @@ const getDefaultUserPreferences = () => {
     concernedAges: [],
     dates: [],
     journeyMoments: [],
-    prices: [],
+    priceMax: 50,
     city: "",
     radius: 50,
   };
@@ -39,12 +39,7 @@ const UserPreferencesSchema = new mongoose.Schema({
       enum: ["Morning", "Noon", "Evening"],
     },
   ],
-  prices: [
-    {
-      type: String,
-      enum: ["Free", "0_10euros", "10+euros"],
-    },
-  ],
+  priceMax: Number,
   city: String,
   radius: Number,
 });

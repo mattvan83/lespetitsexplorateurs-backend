@@ -76,16 +76,23 @@ async function UpdateActivityUserDB() {
       .save()
       .then(console.log("Successful update of the activity"));
 
-    const organizer = await User.findById(idOrganizer);
-    // console.log(organizer);
-
+    let organizer = await User.findById(idOrganizer);
     organizer.organizerDetails.activities.push(activity._id);
+    await organizer
+      .save()
+      .then(
+        console.log("Successful update of the activities of the organizer")
+      );
+
+    organizer = await User.findById(idOrganizer);
     if (organizer.organizerDetails.followed.length === 0) {
       const idUsersFollows = await getRandomIdsUser(User, 4, false);
       organizer.organizerDetails.followed = idUsersFollows;
       await organizer
         .save()
-        .then(console.log("Successful update of the organizer"));
+        .then(
+          console.log("Successful update of the followers of the organizer")
+        );
     }
   }
   const users = await User.find({ isOrganizer: false });

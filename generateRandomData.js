@@ -189,7 +189,7 @@ async function generateSampleData() {
       concernedAges: [],
       dates: [],
       journeyMoments: [],
-      prices: [],
+      priceMax: 50,
       city: "",
       radius: 50,
     };
