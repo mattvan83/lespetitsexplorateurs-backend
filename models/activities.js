@@ -6,11 +6,14 @@ const activitySchema = mongoose.Schema({
   createdAt: Date,
   name: String,
   description: String,
+  durationInMilliseconds: {
+    type: Number,
+    default: 0,
+  },
   category: {
     type: String,
-    enum: ["Sport", "Music", "Creativity", "Motricity", "Awakening"],
-    required: true,
-    // default: "Sport", // Optional: set a default value
+    enum: ["Sport", "Music", "Creativity", "Motricity", "Awakening", ""],
+    default: "", // Optional: set a default value
   },
   concernedAges: [
     {
@@ -22,21 +25,20 @@ const activitySchema = mongoose.Schema({
         "3_6years",
         "7_10years",
         "10+years",
+        "",
       ],
-      required: true,
-      // default: "3_12months", // Optional: set a default value
+      default: "", // Optional: set a default value
     },
   ],
   address: String,
   postalCode: String,
   city: String,
-  locationName: {
-    type: String,
-    required: false,
-    default: "",
-  },
   latitude: Number,
   longitude: Number,
+  locationName: {
+    type: String,
+    default: "",
+  },
   date: Date,
   isRecurrent: {
     type: Boolean,
@@ -45,14 +47,12 @@ const activitySchema = mongoose.Schema({
   },
   recurrence: {
     type: String,
-    enum: ["Daily", "Weekly", "Bimonthly", "Monthly", "Yearly"],
-    required: function () {
-      return this.isRecurrent; // Make recurrence required only if isRecurrent is true
-    },
+    enum: ["Daily", "Weekly", "Bimonthly", "Monthly", "Yearly", ""],
+    default: "",
   },
   image: {
     type: String,
-    required: false,
+    default: "",
   },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
 });

@@ -111,12 +111,17 @@ const locationsHauterives = [
   },
 ];
 
-// Replace 'your-api-key' with your OpenCage Geocoding API key
-const OPEN_CAGE_API_KEY = "6f20d7cff5224c938e6ad01967cf66f8";
+// // Replace 'your-api-key' with your OpenCage Geocoding API key
+// const OPEN_CAGE_API_KEY = "6f20d7cff5224c938e6ad01967cf66f8";
 
-// Models
-const User = require("./models/users"); // Adjust the path accordingly
-const Activity = require("./models/activities"); // Adjust the path accordingly
+// Function to generate a random duration in milliseconds between 15 minutes and 2 hours
+function generateRandomDurationInMilliseconds() {
+  const hours = faker.random.number({ min: 0, max: 1 }); // Random hours between 0 and 1
+  const minutes = faker.random.number({ min: 15, max: 59 }); // Random minutes between 15 and 59
+
+  // Calculate the total duration in milliseconds
+  return (hours * 60 + minutes) * 60 * 1000;
+}
 
 // Helper function to generate random coordinates within France
 async function getRandomCoordinates() {
@@ -193,12 +198,24 @@ async function generateSampleData() {
           About: faker.lorem.paragraph(),
           activities: [],
         }
-      : undefined;
+      : {
+          name: "",
+          function: "",
+          address: "",
+          postalCode: "",
+          city: "",
+          latitude: 0,
+          longitude: 0,
+          followed: [],
+          About: "",
+          activities: [],
+        };
 
     const hashedPassword = hashPassword(faker.internet.password());
     const token = uid2(32); // Generate a token using uid2
 
     const user = {
+      createdAt: faker.date.past(),
       email: faker.internet.email(),
       username: faker.internet.userName(),
       password: hashedPassword,
@@ -207,9 +224,18 @@ async function generateSampleData() {
         "../assets/test/profil1.png",
         "../assets/test/profil2.png",
       ]),
-      followed: isOrganizer ? undefined : [],
+      followed: [],
+      userPreferences: {
+        categories: "",
+        concernedAges: [],
+        dates: [],
+        journeyMoments: [],
+        prices: [],
+        city: "",
+        radius: 50,
+      },
       isOrganizer,
-      organizerDetails: isOrganizer ? organizerDetails : undefined,
+      organizerDetails: organizerDetails,
     };
 
     users.push(user);
@@ -230,6 +256,7 @@ async function generateSampleData() {
       createdAt: faker.date.past(),
       name: faker.lorem.words(3),
       description: faker.lorem.paragraph(),
+      durationInMilliseconds: generateRandomDurationInMilliseconds(),
       category: faker.random.arrayElement([
         "Sport",
         "Music",
