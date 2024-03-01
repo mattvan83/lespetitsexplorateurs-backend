@@ -12,8 +12,8 @@ const activitySchema = mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ["Sport", "Music", "Creativity", "Motricity", "Awakening", ""],
-    default: "", // Optional: set a default value
+    enum: ["Sport", "Music", "Creativity", "Motricity", "Awakening"],
+    // default: "", // Optional: set a default value
   },
   concernedAges: [
     {
@@ -25,9 +25,8 @@ const activitySchema = mongoose.Schema({
         "3_6years",
         "7_10years",
         "10+years",
-        "",
       ],
-      default: "", // Optional: set a default value
+      // default: "", // Optional: set a default value
     },
   ],
   address: String,
@@ -47,8 +46,8 @@ const activitySchema = mongoose.Schema({
   },
   recurrence: {
     type: String,
-    enum: ["Daily", "Weekly", "Bimonthly", "Monthly", "Yearly", ""],
-    default: "",
+    enum: ["Daily", "Weekly", "Bimonthly", "Monthly", "Yearly"],
+    // default: "",
   },
   image: {
     type: String,

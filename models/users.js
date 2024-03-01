@@ -1,5 +1,54 @@
 const mongoose = require("mongoose");
 
+const getDefaultUserPreferences = () => {
+  return {
+    categories: [],
+    concernedAges: [],
+    dates: [],
+    journeyMoments: [],
+    prices: [],
+    city: "",
+    radius: 50,
+  };
+};
+
+const UserPreferencesSchema = new mongoose.Schema({
+  categories: [String],
+  concernedAges: [
+    {
+      type: String,
+      enum: [
+        "3_12months",
+        "12_24months",
+        "24_36months",
+        "3_6years",
+        "7_10years",
+        "10+years",
+      ],
+    },
+  ],
+  dates: [
+    {
+      type: String,
+      enum: ["Today", "Tomorrow", "Week", "Month"],
+    },
+  ],
+  journeyMoments: [
+    {
+      type: String,
+      enum: ["Morning", "Noon", "Evening"],
+    },
+  ],
+  prices: [
+    {
+      type: String,
+      enum: ["Free", "0_10euros", "10+euros"],
+    },
+  ],
+  city: String,
+  radius: Number,
+});
+
 const getDefaultOrganizerDetails = () => {
   return {
     name: "",
@@ -43,57 +92,8 @@ const userSchema = mongoose.Schema({
     default: [],
   },
   userPreferences: {
-    categories: [
-      {
-        type: String,
-        enum: ["Sport", "Music", "Creativity", "Motricity", "Awakening", ""],
-        default: "", // Optional: set a default value
-      },
-    ],
-    concernedAges: [
-      {
-        type: String,
-        enum: [
-          "3_12months",
-          "12_24months",
-          "24_36months",
-          "3_6years",
-          "7_10years",
-          "10+years",
-          "",
-        ],
-        default: "", // Optional: set a default value
-      },
-    ],
-    dates: [
-      {
-        type: String,
-        enum: ["Today", "Tomorrow", "Week", "Month", ""],
-        default: "", // Optional: set a default value
-      },
-    ],
-    journeyMoments: [
-      {
-        type: String,
-        enum: ["Morning", "Noon", "Evening", ""],
-        default: "",
-      },
-    ],
-    prices: [
-      {
-        type: String,
-        enum: ["Free", "0_10euros", "10+euros", ""],
-        default: "",
-      },
-    ],
-    city: {
-      type: String,
-      default: "",
-    },
-    radius: {
-      type: Number,
-      default: 50,
-    },
+    type: UserPreferencesSchema,
+    default: getDefaultUserPreferences,
   },
   isOrganizer: {
     type: Boolean,

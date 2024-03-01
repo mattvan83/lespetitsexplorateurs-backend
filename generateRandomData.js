@@ -184,6 +184,16 @@ async function generateSampleData() {
     const { latitude, longitude, postalCode, city } =
       faker.random.arrayElement(locationsHauterives);
 
+    const userPreferences = {
+      categories: [],
+      concernedAges: [],
+      dates: [],
+      journeyMoments: [],
+      prices: [],
+      city: "",
+      radius: 50,
+    };
+
     const isOrganizer = i % 2 === 0; // Every other user is an organizer
     const organizerDetails = isOrganizer
       ? {
@@ -225,15 +235,7 @@ async function generateSampleData() {
         "../assets/test/profil2.png",
       ]),
       followed: [],
-      userPreferences: {
-        categories: "",
-        concernedAges: [],
-        dates: [],
-        journeyMoments: [],
-        prices: [],
-        city: "",
-        radius: 50,
-      },
+      userPreferences: userPreferences,
       isOrganizer,
       organizerDetails: organizerDetails,
     };
@@ -280,15 +282,13 @@ async function generateSampleData() {
       city,
       date: faker.date.future(),
       isRecurrent,
-      recurrence: isRecurrent
-        ? faker.random.arrayElement([
-            "Daily",
-            "Weekly",
-            "Bimonthly",
-            "Monthly",
-            "Yearly",
-          ])
-        : undefined,
+      recurrence: faker.random.arrayElement([
+        "Daily",
+        "Weekly",
+        "Bimonthly",
+        "Monthly",
+        "Yearly",
+      ]),
       image: faker.random.arrayElement([
         "../assets/test/activity1.png",
         "../assets/test/activity2.png",

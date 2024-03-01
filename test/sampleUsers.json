@@ -1,0 +1,622 @@
+[
+  {
+    "createdAt": "2023-04-20T03:49:23.143Z",
+    "email": "Candace_Barton6@gmail.com",
+    "username": "Arch_Bartell",
+    "password": "$2b$10$ovw5JMOf3ltDox6TODVOBu9vA3XH.5fnoF.S8SNodVm2nAUsrxX1u",
+    "token": "yoXpZatZ29DyF0uzd3RggAhIsgj02QEb",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Nicolas LLC",
+      "function": "Human Web Engineer",
+      "address": "6720 Madonna Keys",
+      "postalCode": "38160",
+      "latitude": 45.1413,
+      "longitude": 5.3239,
+      "city": "Saint-Marcellin",
+      "followed": [],
+      "About": "Tempora doloremque placeat. Amet eos architecto corrupti. Sit aspernatur et fugiat corrupti laboriosam quo veniam. Laboriosam natus rerum ipsam quisquam ipsam magni suscipit eveniet. Qui quam temporibus fugit quo exercitationem ipsa veritatis.",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-10-28T17:40:58.303Z",
+    "email": "Merle.Kling@gmail.com",
+    "username": "Gail_Kuhn30",
+    "password": "$2b$10$K5G5oEiAwp0ESLEVxiNwQuyRBfsFN4/tuRvxUjLH162emNQrdOcEC",
+    "token": "p_hhpLMvLAElaOATX6-2juCYgVEPAF-l",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": false,
+    "organizerDetails": {
+      "name": "",
+      "function": "",
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "latitude": 0,
+      "longitude": 0,
+      "followed": [],
+      "About": "",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2024-01-14T15:15:46.695Z",
+    "email": "Vernice.Kuvalis20@hotmail.com",
+    "username": "Nyasia81",
+    "password": "$2b$10$9XpquFc//Ap65.ni/3FkyejOEbDdU3UACISyH7OvtqVwRgka2kVy2",
+    "token": "yIow7vmHp-0UvIrUW6IwDgl_VMKRWx0E",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Carter Inc",
+      "function": "Dynamic Identity Strategist",
+      "address": "6955 Bayer Land",
+      "postalCode": "26110",
+      "latitude": 44.3592,
+      "longitude": 5.1318,
+      "city": "Nyons",
+      "followed": [],
+      "About": "Quia itaque quia aperiam voluptate optio natus. Velit ipsam occaecati corrupti eaque minus occaecati et omnis. Consequatur velit iure qui expedita sapiente dolorem. Dolor doloremque voluptas officia dolor vitae labore iste.",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-07-03T00:54:50.892Z",
+    "email": "Donnie.Koch57@gmail.com",
+    "username": "Karl20",
+    "password": "$2b$10$iNDR08LisJTW9RQZIWCNqO9oKLkwHO3rgW2bOp8.xoaoAiJ56cy/a",
+    "token": "g2hG6bEga3u_1_BoEqbVnh_hMX_AH9TR",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": false,
+    "organizerDetails": {
+      "name": "",
+      "function": "",
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "latitude": 0,
+      "longitude": 0,
+      "followed": [],
+      "About": "",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-09-11T02:21:09.377Z",
+    "email": "Tate41@hotmail.com",
+    "username": "Juston84",
+    "password": "$2b$10$EZe3JILlNd1J/WhsXEdOw.lKbDXGCjCIVaYaxJybF2WGWBfOBMnxq",
+    "token": "MWmTQuahNRcd0HTVMx8ELy2LLE4nvWuH",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "O'Hara - Gleichner",
+      "function": "Product Functionality Specialist",
+      "address": "548 Cierra Via",
+      "postalCode": "26270",
+      "latitude": 44.7518,
+      "longitude": 4.8238,
+      "city": "Loriol-sur-Drôme",
+      "followed": [],
+      "About": "Quidem molestiae necessitatibus debitis voluptatem ea delectus molestiae fugit iusto. Ipsa ut sit quis. Dolorem facilis ut et voluptatem nulla. Necessitatibus necessitatibus aliquam quas qui dicta.",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-04-05T14:48:58.041Z",
+    "email": "Serena_Ernser@hotmail.com",
+    "username": "Jayson_Walsh",
+    "password": "$2b$10$mLrj7zFY1v8S7SeJpQP2ce5Vny6zoXPao2BOVJElbnT1CneGvs3We",
+    "token": "62Hbd3BFKFvMb9ib3KJxdt_oe3bzQFxO",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": false,
+    "organizerDetails": {
+      "name": "",
+      "function": "",
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "latitude": 0,
+      "longitude": 0,
+      "followed": [],
+      "About": "",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-07-26T09:53:47.477Z",
+    "email": "Douglas97@hotmail.com",
+    "username": "Jaydon1",
+    "password": "$2b$10$zSkCK/VYBPmX4WwGGX1I1ub4f40vXEqFiH18XLgelGkICmsyHmuqm",
+    "token": "H8Mz_2V_sigWnqXVRWRK5_y-pPMMYrxM",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Crist - Mosciski",
+      "function": "Customer Branding Specialist",
+      "address": "283 Ima Curve",
+      "postalCode": "38200",
+      "latitude": 45.5281,
+      "longitude": 4.8784,
+      "city": "Vienne",
+      "followed": [],
+      "About": "A rerum praesentium impedit doloremque. Accusamus inventore deleniti. Nisi nisi porro aut ut.",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-08-10T10:04:26.584Z",
+    "email": "Abby.Durgan@yahoo.com",
+    "username": "Beryl31",
+    "password": "$2b$10$hj3CBYPz/cc6strwvfjY.uhoqEhCeDPCnOkKvw.c6BW.k.h45btLy",
+    "token": "1p3YF6TeinsAk2USVEKmufx5dGMsdgJL",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": false,
+    "organizerDetails": {
+      "name": "",
+      "function": "",
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "latitude": 0,
+      "longitude": 0,
+      "followed": [],
+      "About": "",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-08-13T08:58:55.185Z",
+    "email": "Chet_Little@yahoo.com",
+    "username": "Perry_Schultz",
+    "password": "$2b$10$X5gjEGZpuiCxY1Fy5cxl2uvNIfb1Ub/xs.AZjmW0mGs8nbcU2S0pW",
+    "token": "G9isR6t9VsWxs3jZpKq5z4pS9mls-Ckq",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Blick, Hammes and Kozey",
+      "function": "Forward Accountability Representative",
+      "address": "030 Sporer Walk",
+      "postalCode": "38200",
+      "latitude": 45.5281,
+      "longitude": 4.8784,
+      "city": "Vienne",
+      "followed": [],
+      "About": "Dolores mollitia vel ab repudiandae ab quis voluptatem. Saepe repudiandae soluta corporis. Sapiente quia nihil. Ut saepe iste optio ad quisquam vel necessitatibus et.",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-09-30T19:57:54.905Z",
+    "email": "Jeffery_Schuster56@hotmail.com",
+    "username": "Manuel_Schultz68",
+    "password": "$2b$10$E/JnJ9ox4xZSFhLfYafvyuCTNgQPAZFx0B1lq1DlM2OJ7TcBpSwIu",
+    "token": "QxE8Fva6gRndiQ87ooADvuPnok3lNJOg",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": false,
+    "organizerDetails": {
+      "name": "",
+      "function": "",
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "latitude": 0,
+      "longitude": 0,
+      "followed": [],
+      "About": "",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-04-14T08:41:49.415Z",
+    "email": "Frederik.Kassulke29@hotmail.com",
+    "username": "Lera68",
+    "password": "$2b$10$wkuEvAqpZtD2qL4znu5O8e4Zb7Gvi8wSwXU9dcoYgKb7OgBv7WVNm",
+    "token": "Zt3B51ENipx3t_1Tueje6cNFReydoDyh",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Smitham, Herzog and Kuphal",
+      "function": "Global Intranet Representative",
+      "address": "825 Bode Lane",
+      "postalCode": "07130",
+      "latitude": 44.9308,
+      "longitude": 4.8481,
+      "city": "Saint-Péray",
+      "followed": [],
+      "About": "Et repudiandae omnis velit sed minima quis dolor. Excepturi dolores sit neque ullam voluptate sunt sint architecto voluptate. Sunt voluptates et soluta veritatis accusantium sit dolor. Impedit labore excepturi. Eveniet maxime molestiae aut. Voluptatem et facilis placeat voluptatem.",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-11-30T02:40:24.644Z",
+    "email": "Lillian34@gmail.com",
+    "username": "Kraig_Schimmel99",
+    "password": "$2b$10$B69HQ30mpnS7GEgRg4.o4.oRTeAKfF7b4Cu/u6M0rqnF.bZyxu7u6",
+    "token": "YtA_cCf5v3RhJ-KkYxCnu-4okPP-5YsN",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": false,
+    "organizerDetails": {
+      "name": "",
+      "function": "",
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "latitude": 0,
+      "longitude": 0,
+      "followed": [],
+      "About": "",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-07-23T03:46:45.998Z",
+    "email": "Wilfrid_Quigley@hotmail.com",
+    "username": "Garett_Oberbrunner79",
+    "password": "$2b$10$eEol3yLhIs6eZXbJTUgNwuKh0ri8P03cJCB4wllFm22hx4Hjun1Rq",
+    "token": "9aKa0j4tDYPmf3aqQ7xZF-34Y-fqsMIV",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Christiansen, Bartell and Huel",
+      "function": "International Functionality Associate",
+      "address": "387 Schuster Street",
+      "postalCode": "07130",
+      "latitude": 44.9308,
+      "longitude": 4.8481,
+      "city": "Saint-Péray",
+      "followed": [],
+      "About": "Impedit nulla totam sed consequatur consequatur omnis non temporibus sit. Incidunt illo at laboriosam dicta odio ut vero velit possimus. Quo natus amet culpa ut optio laborum expedita. Ut repellat voluptatibus iste unde. Culpa eos quia est ipsum est aspernatur tempore sint sit.",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-12-29T19:24:00.727Z",
+    "email": "Alessandra_Bayer@gmail.com",
+    "username": "Tate62",
+    "password": "$2b$10$8tM2Ei7r4VoVuplnDYAIPOB7NITtuylafwax1CuB.j28tLPTN81bK",
+    "token": "dUyCFtsCofVRGgGVNjNTs36Yw0O34zp2",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": false,
+    "organizerDetails": {
+      "name": "",
+      "function": "",
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "latitude": 0,
+      "longitude": 0,
+      "followed": [],
+      "About": "",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-12-13T20:45:21.199Z",
+    "email": "Jeanette49@gmail.com",
+    "username": "Darian_Spinka45",
+    "password": "$2b$10$KgoHk3QwFdFLcAO0QxnsDugP.p.XEOiZPQ.RXeah9JDhyPFmcP7VG",
+    "token": "CZR6Gvsu-Cs8uIttVFnGwdT89_BG-EdN",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Hartmann, Labadie and Powlowski",
+      "function": "Dynamic Research Technician",
+      "address": "83581 Cydney Ranch",
+      "postalCode": "26700",
+      "latitude": 44.3749,
+      "longitude": 4.6981,
+      "city": "Pierrelatte",
+      "followed": [],
+      "About": "Alias deserunt consequatur quisquam. Quia unde quas suscipit dolorem magni qui. Distinctio quia quia et inventore qui quisquam et. Et voluptatem esse consequatur voluptate molestiae.",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-05-18T01:57:40.699Z",
+    "email": "Ephraim_Schroeder@gmail.com",
+    "username": "Linda_Casper4",
+    "password": "$2b$10$w6sz64EpfZzgl82/sajsdeUS0Z.UWGHU1kfBDrKPLzwnZfto.M2L6",
+    "token": "LXjJa8G5dl2TQLChbolGBI9xBRb_Cmna",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": false,
+    "organizerDetails": {
+      "name": "",
+      "function": "",
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "latitude": 0,
+      "longitude": 0,
+      "followed": [],
+      "About": "",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2024-02-29T23:12:05.475Z",
+    "email": "Hertha_Rempel@hotmail.com",
+    "username": "Graham.Jacobi",
+    "password": "$2b$10$kn2DeFll6tYugJuAmNyBjOX2TJnN6gJa6OrriacOvs8QUTKSssKc2",
+    "token": "F0fsX8euIf4J6ld-yC43nGOpXdHFfdL8",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Deckow - Hudson",
+      "function": "Legacy Intranet Agent",
+      "address": "6104 Edna Turnpike",
+      "postalCode": "26300",
+      "latitude": 45.0808,
+      "longitude": 4.9213,
+      "city": "Châteauneuf-sur-Isère",
+      "followed": [],
+      "About": "Explicabo eos nisi ipsum mollitia voluptatem. Similique velit et voluptatem et dicta labore. Quis et quaerat rerum explicabo eum. Repellendus et saepe. Placeat possimus quia deleniti fugiat eaque quisquam. Enim nemo sequi occaecati a.",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2024-01-14T10:15:12.194Z",
+    "email": "Declan.Kuphal@yahoo.com",
+    "username": "Kim_Volkman11",
+    "password": "$2b$10$y53VATz3u0S4tLAD8tBjMu4OxsnYZ2v1TFSrilJthd6wD9pk6xt2a",
+    "token": "eQ5vMUurNtJxAj9wqrEyUbRmLuUQyNxu",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": false,
+    "organizerDetails": {
+      "name": "",
+      "function": "",
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "latitude": 0,
+      "longitude": 0,
+      "followed": [],
+      "About": "",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-12-05T04:15:01.510Z",
+    "email": "Deanna99@yahoo.com",
+    "username": "Zander_Christiansen78",
+    "password": "$2b$10$//Wq.tTnjcT3BSvGOjmsreqNcsaW6EohlbJYgXiAJEi3ZYXMn8Auu",
+    "token": "5jqJt9YbCNGjOL61urfJhTQ9kicp4_hJ",
+    "image": "../assets/test/profil2.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": true,
+    "organizerDetails": {
+      "name": "Lebsack - Auer",
+      "function": "International Group Agent",
+      "address": "42906 Tressa Spring",
+      "postalCode": "26110",
+      "latitude": 44.3592,
+      "longitude": 5.1318,
+      "city": "Nyons",
+      "followed": [],
+      "About": "Sed quo dolorem nobis. Doloremque unde voluptatem ut vel eius voluptatem iusto velit. Repudiandae illum accusamus praesentium voluptatem dolores sed sapiente odio. Quis ratione suscipit aliquid ipsum neque. Earum necessitatibus neque. Officia quisquam qui aut eligendi est qui.",
+      "activities": []
+    }
+  },
+  {
+    "createdAt": "2023-11-06T07:53:58.940Z",
+    "email": "Amely77@gmail.com",
+    "username": "Cleora.Gaylord",
+    "password": "$2b$10$PzBhLkvRSpX4DU0XS0VyoemoFgGMeIGMOtwpaNOG0DuES35NB4nzC",
+    "token": "-Bu08q_s39UE1fZTnSOY34PmJJ-hDS6F",
+    "image": "../assets/test/profil1.png",
+    "followed": [],
+    "userPreferences": {
+      "categories": [],
+      "concernedAges": [],
+      "dates": [],
+      "journeyMoments": [],
+      "prices": [],
+      "city": "",
+      "radius": 50
+    },
+    "isOrganizer": false,
+    "organizerDetails": {
+      "name": "",
+      "function": "",
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "latitude": 0,
+      "longitude": 0,
+      "followed": [],
+      "About": "",
+      "activities": []
+    }
+  }
+]
