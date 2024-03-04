@@ -8,7 +8,8 @@ const uid2 = require('uid2');
 
 /* ACCOUNT CREATION */
 router.post('/signup', (req, res) => {
-  if (!checkBody(req.body, ['email, username', 'password'])) {
+
+  if (!checkBody(req.body, ['email', 'username', 'password'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
@@ -43,14 +44,14 @@ router.post('/signup', (req, res) => {
 
 /* CONNEXION */
 router.post('/signin', (req, res) => {
-  if (!checkBody(req.body, ['username', 'password'])) {
+  if (!checkBody(req.body, ['email', 'password'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
 
-  User.findOne({ username: { $regex: new RegExp(req.body.username, 'i') } }).then(data => {
+  User.findOne({ email: { $regex: new RegExp(req.body.email, 'i') } }).then(data => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-      res.json({ result: true, token: data.token, username: data.username, firstName: data.firstName });
+      res.json({ result: true, token: data.token, username: data.username });
     } else {
       res.json({ result: false, error: 'User not found or wrong password' });
     }
