@@ -67,7 +67,7 @@ const OrganizerDetailsSchema = new mongoose.Schema({
   city: String,
   latitude: Number,
   longitude: Number,
-  followed: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
+  followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   About: String,
   activities: [{ type: mongoose.Schema.Types.ObjectId, ref: "activities" }],
 });
@@ -82,7 +82,7 @@ const userSchema = mongoose.Schema({
     type: String,
     default: "",
   },
-  followed: {
+  followedBy: {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
     default: [],
   },

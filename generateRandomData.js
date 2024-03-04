@@ -204,7 +204,7 @@ async function generateSampleData() {
           latitude,
           longitude,
           city,
-          followed: [],
+          followedBy: [],
           About: faker.lorem.paragraph(),
           activities: [],
         }
@@ -234,7 +234,7 @@ async function generateSampleData() {
         "../assets/test/profil1.png",
         "../assets/test/profil2.png",
       ]),
-      followed: [],
+      followedBy: [],
       userPreferences: userPreferences,
       isOrganizer,
       organizerDetails: organizerDetails,

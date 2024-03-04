@@ -85,9 +85,9 @@ async function UpdateActivityUserDB() {
       );
 
     organizer = await User.findById(idOrganizer);
-    if (organizer.organizerDetails.followed.length === 0) {
+    if (organizer.organizerDetails.followedBy.length === 0) {
       const idUsersFollows = await getRandomIdsUser(User, 4, false);
-      organizer.organizerDetails.followed = idUsersFollows;
+      organizer.organizerDetails.followedBy = idUsersFollows;
       await organizer
         .save()
         .then(
@@ -98,7 +98,7 @@ async function UpdateActivityUserDB() {
   const users = await User.find({ isOrganizer: false });
   for (const user of users) {
     const idUsersFollows = await getRandomIdsUser(User, 5, false);
-    user.followed = idUsersFollows;
+    user.followedBy = idUsersFollows;
     await user.save().then(console.log("Successful update of the parent"));
   }
 }
