@@ -58,4 +58,18 @@ router.post('/signin', (req, res) => {
   });
 });
 
+//Get the organizer name for ActivitySheet
+router.get('/:id', (req, res) => {
+  const userId = req.params.id;
+
+  User.findById(userId)
+    .then(data => {
+      if (data) {
+        res.json({ result: true, name: data.organizerDetails.name });
+      } else {
+        res.json({ result: false, error: 'User not found' });
+      }
+    });
+  });
+
 module.exports = router;

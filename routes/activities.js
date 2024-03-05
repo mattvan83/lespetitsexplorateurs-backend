@@ -128,4 +128,30 @@ router.get("/geoloc/:token/:latitude/:longitude", (req, res) => {
   });
 });
 
+
+//Get the activity informations for the ActivitySheet
+router.get('/:id', (req, res) => {
+    const activityId = req.params.id;
+
+    Activity.findById(activityId)
+    .then(activity => {
+        if (activity) {
+          res.json({
+            organizer: activity.organizer,
+            name: activity.name,
+            description: activity.description,
+            address: activity.address,
+            postalCode: activity.postalCode,
+            city: activity.city,
+            locationName: activity.locationName,
+            date: activity.date,
+            duration: activity.durationInMilliseconds,
+            image: activity.image
+          });
+        } else {
+          res.json({ error: 'Activity not found' });
+        }
+      })
+  });
+
 module.exports = router;
