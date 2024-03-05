@@ -191,6 +191,8 @@ async function generateSampleData() {
       journeyMoments: [],
       priceMax: 50,
       city: "",
+      latitude: 0,
+      longitude: 0,
       radius: 50,
     };
 

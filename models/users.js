@@ -8,6 +8,8 @@ const getDefaultUserPreferences = () => {
     journeyMoments: [],
     priceMax: 50,
     city: "",
+    latitude: 0,
+    longitude: 0,
     radius: 50,
   };
 };
@@ -41,6 +43,8 @@ const UserPreferencesSchema = new mongoose.Schema({
   ],
   priceMax: Number,
   city: String,
+  latitude: Number,
+  longitude: Number,
   radius: Number,
 });
 
