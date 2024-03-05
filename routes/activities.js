@@ -83,17 +83,15 @@ router.get("/geoloc/:token/:latitude/:longitude", (req, res) => {
                 postalCode: activity.postalCode,
                 city: activity.city,
                 isLiked: activity.likes.includes(userId),
-                distance: parseFloat(
-                  convertCoordsToKm(
-                    {
-                      latitude: req.params.latitude,
-                      longitude: req.params.longitude,
-                    },
-                    {
-                      latitude: activity.latitude,
-                      longitude: activity.longitude,
-                    }
-                  )
+                distance: convertCoordsToKm(
+                  {
+                    latitude: req.params.latitude,
+                    longitude: req.params.longitude,
+                  },
+                  {
+                    latitude: activity.latitude,
+                    longitude: activity.longitude,
+                  }
                 ),
               };
             });
