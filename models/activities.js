@@ -18,14 +18,7 @@ const activitySchema = mongoose.Schema({
   concernedAges: [
     {
       type: String,
-      enum: [
-        "3_12months",
-        "12_24months",
-        "24_36months",
-        "3_6years",
-        "7_10years",
-        "10+years",
-      ],
+      enum: ["3_12months", "1_3years", "3_6years", "6_10years", "10+years"],
       // default: "", // Optional: set a default value
     },
   ],
