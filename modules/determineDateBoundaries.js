@@ -172,8 +172,11 @@ const determineDateBoundaries = (dateFilter) => {
   ) {
     dateBoundaries.push([today, endOfWeekend]);
   }
+
+  return dateBoundaries;
 };
 
-determineDateBoundaries();
+const dateFilter = ["Today", "Tomorrow"];
+console.log(determineDateBoundaries(dateFilter));
 
 module.exports = { determineDateBoundaries };
