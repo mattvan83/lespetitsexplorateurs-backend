@@ -51,7 +51,7 @@ router.post('/signin', (req, res) => {
 
   User.findOne({ email: { $regex: new RegExp(req.body.email, 'i') } }).then(data => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-      res.json({ result: true, token: data.token, username: data.username });
+      res.json({ result: true, token: data.token, username: data.username, userPreferences : data.userPreferences });
     } else {
       res.json({ result: false, error: 'User not found or wrong password' });
     }
@@ -93,19 +93,5 @@ router.put('/updatePreferences/:token', (req, res) => {
     });
   });
 
-  // GET user preferences
-router.get('/userPreferences/:token', (req, res) => {
-  const token = req.params.token;
-
-  User.find({ token: token })
-    .then(data => {
-      if (data) {
-        console.log(data)
-        res.json({ result: true, userPreferences: data[0].userPreferences });
-      } else {
-        res.json({ result: false, error: 'User not found' });
-      }
-    });
-  });
 
 module.exports = router;
