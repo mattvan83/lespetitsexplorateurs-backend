@@ -72,4 +72,25 @@ router.get('/:id', (req, res) => {
     });
   });
 
+// Update user preferences
+router.put('/updatePreferences/:token', (req, res) => {
+  const token = req.params.token;
+
+  User.find({ token: token })
+    .then(data => {
+      if (data) {
+        User.updateOne({ token: token }, { $set: { 'userPreferences.concernedAges' : req.body.concernedAges, 'userPreferences.radius' : req.body.radius, 'userPreferences.city' : req.body.city,'userPreferences.latitude' : req.body.latitude ,'userPreferences.longitude' : req.body.longitude} })
+        .then(data => {
+          if(data) {
+            res.json({ result: true });
+          } else {
+            res.json({ result: false, error: 'An error occured during update' });
+          }
+        });
+      } else {
+        res.json({ result: false, error: 'User not found' });
+      }
+    });
+  });
+
 module.exports = router;
