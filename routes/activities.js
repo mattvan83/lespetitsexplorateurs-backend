@@ -271,4 +271,98 @@ router.get("/:id", (req, res) => {
   });
 });
 
+// GET all the activities of the user
+router.get("/allactivities/:token", (req, res) => {
+  User.findOne({ token: req.params.token }).then((data) => {
+    if (data) {
+      const userId = data._id;
+      // Collect all activities of the user sorted by increasing date of happening.
+      Activity.find({ author: userId})
+        .populate("organizer")
+        .then((activities) => {
+          if (activities.length) {
+            const activitiesMapped = activities.map((activity) => {
+                return {
+                  id: activity._id,
+                  imgUrl: activity.image,
+                  organizer: activity.organizer.organizerDetails.name,
+                  organizerImgUrl: activity.organizer.image,
+                  date: activity.date,
+                  name: activity.name,
+                  postalCode: activity.postalCode,
+                  city: activity.city,
+                  isLiked: activity.likes.includes(userId),
+                };
+              })
+              .sort((a, b) => a.date - b.date);
+
+             res.json({ result: true, activities: activitiesMapped});
+          } else {
+            res.json({ result: false, error: "No activity found in database",
+            });
+          }
+        });
+    } else {
+      res.json({ result: false, error: "User not found" });
+    }
+  });
+});
+
+
+//Get activities created by user
+router.get("/all/:token", (req, res) => {
+  User.findOne({ token: req.params.token }).then((data) => {
+    if (data) {
+      const userId = data._id;
+      // Collect all activities of the user
+      Activity.find({ author: userId }).then((activities) => {
+        if (activities.length) {
+          const activitiesMapped = activities.map((activity) => {
+            return {
+              id: activity._id,
+              imgUrl: activity.image,
+              organizer: activity.organizer.organizerDetails.name,
+              organizerImgUrl: activity.organizer.image,
+              date: activity.date,
+              name: activity.name,
+              postalCode: activity.postalCode,
+              city: activity.city,
+              isLiked: activity.likes.includes(userId),
+            };
+          })
+          res.json({ result: true, activities: activitiesMapped });
+        } else {
+          res.json({ result: false, error: "No activity found in database" });
+        }
+      });
+    } else {
+      res.json({ result: false, error: "User not found" });
+    }
+  });
+});
+
+//Get activities
+router.get("/", (req, res) => {
+  Activity.find().then((activities) => {
+    if (activities.length) {
+      const activitiesMapped = activities.map((activity) => {
+        return {
+          id: activity._id,
+          imgUrl: activity.image,
+          organizer: activity.organizer.organizerDetails.name,
+          organizerImgUrl: activity.organizer.image,
+          date: activity.date,
+          name: activity.name,
+          postalCode: activity.postalCode,
+          city: activity.city,
+          isLiked: activity.likes.includes(userId),
+        };
+      })
+      res.json({ result: true, activities: activitiesMapped });
+    } else {
+      res.json({ result: false, error: "No activity found in database" });
+    }
+  });
+});
+
 module.exports = router;
