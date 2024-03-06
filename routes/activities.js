@@ -26,6 +26,19 @@ const ageMapping = {
   "10+ ans": "10+years",
 };
 
+const dateMapping = {
+  "Aujourd'hui": "Today",
+  Demain: "Tomorrow",
+  "Cette semaine": "Week",
+  "Ce week-end": "Weekend",
+};
+
+const momentMapping = {
+  Matin: "Morning",
+  "Après-midi": "Afternoon",
+  Soir: "Evening",
+};
+
 router.get("/nogeoloc/:token", (req, res) => {
   User.findOne({ token: req.params.token }).then((data) => {
     if (data) {
@@ -116,6 +129,20 @@ router.post("/geoloc", (req, res) => {
       if (userFiltersCleaned.ageFilter.length) {
         userFiltersCleaned.ageFilter = userFiltersCleaned.ageFilter.map(
           (age) => ageMapping[age]
+        );
+      }
+
+      // Mapping between frontend and backend date
+      if (userFiltersCleaned.dateFilter.length) {
+        userFiltersCleaned.dateFilter = userFiltersCleaned.dateFilter.map(
+          (date) => dateMapping[date]
+        );
+      }
+
+      // Mapping between frontend and backend moment
+      if (userFiltersCleaned.momentFilter.length) {
+        userFiltersCleaned.momentFilter = userFiltersCleaned.momentFilter.map(
+          (moment) => momentMapping[moment]
         );
       }
 
