@@ -93,4 +93,19 @@ router.put('/updatePreferences/:token', (req, res) => {
     });
   });
 
+  // GET user preferences
+router.get('/userPreferences/:token', (req, res) => {
+  const token = req.params.token;
+
+  User.find({ token: token })
+    .then(data => {
+      if (data) {
+        console.log(data)
+        res.json({ result: true, userPreferences: data[0].userPreferences });
+      } else {
+        res.json({ result: false, error: 'User not found' });
+      }
+    });
+  });
+
 module.exports = router;
