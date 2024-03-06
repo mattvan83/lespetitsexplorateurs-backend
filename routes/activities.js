@@ -152,4 +152,54 @@ router.get('/:id', (req, res) => {
       })
   });
 
+  //Create a new activity - POST
+  router.post("/newActivity/:token", (req, res) => {
+    User.findOne({ token: req.params.token }).then((data) => {
+      if (data) {
+        if (!checkBody(req.body, ["activity info"])) {
+          res.json({ result: false, error: "Missing or empty fields" });
+          return;
+        }
+  
+        const newActivity = new Activity({
+          author: data._id,
+          organizer: data._id,
+          createdAt: new Date(),
+          name: req.body.name,
+          description: req.body.description,
+          durationInMilliseconds: req.body.duration,
+          category: req.body.category,
+          concernedAgeds: [],
+          address: req.body.address,
+          postalCode: req.body.postalCode,
+          locationName: req.body.locationName,
+          latitude: req.body.latitude,
+          longitude: req.body.longitude,
+          city: req.body.city,
+          date: req.body.date,
+          isRecurrent: false,
+          recurrence: req.body.recurrence,
+          image: req.files.photoFromFront,
+          likes: [],
+        });
+  
+        newActivity.save().then((activity) => {
+          if (activity) {
+            res.json({
+              result: true,
+              activity,
+            });
+          } else {
+            res.json({
+              result: false,
+              error: "New activity failed to be registered",
+            });
+          }
+        });
+      } else {
+        res.json({ result: false, error: "User not found" });
+      }
+    });
+  });
+
 module.exports = router;

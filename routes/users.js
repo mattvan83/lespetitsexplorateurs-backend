@@ -65,7 +65,7 @@ router.get('/:id', (req, res) => {
   User.findById(userId)
     .then(data => {
       if (data) {
-        res.json({ result: true, name: data.organizerDetails.name });
+        res.json({ result: true, name: data.organizerDetails.name, image: data.image });
       } else {
         res.json({ result: false, error: 'User not found' });
       }
