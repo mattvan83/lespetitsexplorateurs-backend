@@ -73,8 +73,8 @@ router.get('/:id', (req, res) => {
   });
 
 // Update user preferences
-router.put('/updatePreferences/:token', (req, res) => {
-  const token = req.params.token;
+router.put('/updatePreferences', (req, res) => {
+  const token = req.body.token;
 
   User.find({ token: token })
     .then(data => {
