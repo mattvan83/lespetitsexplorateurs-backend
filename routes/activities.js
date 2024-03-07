@@ -340,23 +340,26 @@ router.delete('/', (req, res) => {
 });
 
   //Create a new activity - POST
-  router.post("/newActivity/:token", (req, res) => {
-    User.findOne({ token: req.params.token }).then((data) => {
-      if (data) {
-        if (!checkBody(req.body, ["activity info"])) {
+  router.post("/newActivity", (req, res) => {
+    const requiredFields = ['name', 'description', 'category', 'address', 'date'];
+    if (!checkBody(req.body, requiredFields)) {
           res.json({ result: false, error: "Missing or empty fields" });
           return;
         }
+        //id from fake bd:
+        //const userId = ObjectId('65e8350c87ae8d56cbb63ef1');
+        //const organizerId = ObjectId('65e77185e8a90dd96d5b27a1');
+        const createdAt = new Date();
   
         const newActivity = new Activity({
-          author: data._id,
-          organizer: data._id,
-          createdAt: new Date(),
+          //author: userId,
+          //organizerId,
+          createdAt,
           name: req.body.name,
           description: req.body.description,
           durationInMilliseconds: req.body.duration,
           category: req.body.category,
-          concernedAgeds: [],
+          concernedAges: req.body.concernedAges,
           address: req.body.address,
           postalCode: req.body.postalCode,
           locationName: req.body.locationName,
@@ -364,10 +367,9 @@ router.delete('/', (req, res) => {
           longitude: req.body.longitude,
           city: req.body.city,
           date: req.body.date,
-          isRecurrent: false,
+          isRecurrent: req.body.isRecurrent,
           recurrence: req.body.recurrence,
-          image: req.files.photoFromFront,
-          likes: [],
+          image: req.body.image,
         });
   
         newActivity.save().then((activity) => {
@@ -383,10 +385,6 @@ router.delete('/', (req, res) => {
             });
           }
         });
-      } else {
-        res.json({ result: false, error: "User not found" });
-      }
-    });
   });
 
 module.exports = router;
