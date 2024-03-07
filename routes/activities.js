@@ -375,11 +375,12 @@ router.get("/allactivities/:token", (req, res) => {
     if (data) {
       const userId = data._id;
       // Collect all activities of the user sorted by increasing date of happening.
-      Activity.find({ author: userId})
+      Activity.find({ author: userId })
         .populate("organizer")
         .then((activities) => {
           if (activities.length) {
-            const activitiesMapped = activities.map((activity) => {
+            const activitiesMapped = activities
+              .map((activity) => {
                 return {
                   id: activity._id,
                   imgUrl: activity.image,
@@ -394,10 +395,9 @@ router.get("/allactivities/:token", (req, res) => {
               })
               .sort((a, b) => a.date - b.date);
 
-             res.json({ result: true, activities: activitiesMapped});
+            res.json({ result: true, activities: activitiesMapped });
           } else {
-            res.json({ result: false, error: "No activity found in database",
-            });
+            res.json({ result: false, error: "No activity found in database" });
           }
         });
     } else {
@@ -407,26 +407,30 @@ router.get("/allactivities/:token", (req, res) => {
 });
 
 // DELETE an activity
-router.delete('/', (req, res) => {
-  if (!checkBody(req.body, ['token', 'activityId'])) {
-    res.json({ result: false, error: 'Missing or empty fields' });
+router.delete("/", (req, res) => {
+  if (!checkBody(req.body, ["token", "activityId"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
 
-  User.findOne({ token: req.body.token }).then(user => {
+  User.findOne({ token: req.body.token }).then((user) => {
     if (user === null) {
-      res.json({ result: false, error: 'User not found' });
+      res.json({ result: false, error: "User not found" });
       return;
     }
 
     Activity.findById(req.body.activityId)
-      .populate('author')
-      .then(activity => {
+      .populate("author")
+      .then((activity) => {
         if (!activity) {
-          res.json({ result: false, error: 'Activity not found' });
+          res.json({ result: false, error: "Activity not found" });
           return;
-        } else if (String(activity.author._id) !== String(user._id)) { // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
-          res.json({ result: false, error: 'Activity can only be deleted by its author' });
+        } else if (String(activity.author._id) !== String(user._id)) {
+          // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
+          res.json({
+            result: false,
+            error: "Activity can only be deleted by its author",
+          });
           return;
         }
 
@@ -437,52 +441,52 @@ router.delete('/', (req, res) => {
   });
 });
 
-  //Create a new activity - POST
-  router.post("/newActivity", (req, res) => {
-    const requiredFields = ['name', 'description', 'category', 'address', 'date'];
-    if (!checkBody(req.body, requiredFields)) {
-          res.json({ result: false, error: "Missing or empty fields" });
-          return;
-        }
-        //id from fake bd:
-        //const userId = ObjectId('65e8350c87ae8d56cbb63ef1');
-        //const organizerId = ObjectId('65e77185e8a90dd96d5b27a1');
-        const createdAt = new Date();
-  
-        const newActivity = new Activity({
-          //author: userId,
-          //organizerId,
-          createdAt,
-          name: req.body.name,
-          description: req.body.description,
-          durationInMilliseconds: req.body.duration,
-          category: req.body.category,
-          concernedAges: req.body.concernedAges,
-          address: req.body.address,
-          postalCode: req.body.postalCode,
-          locationName: req.body.locationName,
-          latitude: req.body.latitude,
-          longitude: req.body.longitude,
-          city: req.body.city,
-          date: req.body.date,
-          isRecurrent: req.body.isRecurrent,
-          recurrence: req.body.recurrence,
-          image: req.body.image,
-        });
-  
-        newActivity.save().then((activity) => {
-          if (activity) {
-            res.json({
-              result: true,
-              activity,
-            });
-          } else {
-            res.json({
-              result: false,
-              error: "New activity failed to be registered",
-            });
-          }
-        });
+//Create a new activity - POST
+router.post("/newActivity", (req, res) => {
+  const requiredFields = ["name", "description", "category", "address", "date"];
+  if (!checkBody(req.body, requiredFields)) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+  //id from fake bd:
+  //const userId = ObjectId('65e8350c87ae8d56cbb63ef1');
+  //const organizerId = ObjectId('65e77185e8a90dd96d5b27a1');
+  const createdAt = new Date();
+
+  const newActivity = new Activity({
+    //author: userId,
+    //organizerId,
+    createdAt,
+    name: req.body.name,
+    description: req.body.description,
+    durationInMilliseconds: req.body.duration,
+    category: req.body.category,
+    concernedAges: req.body.concernedAges,
+    address: req.body.address,
+    postalCode: req.body.postalCode,
+    locationName: req.body.locationName,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+    city: req.body.city,
+    date: req.body.date,
+    isRecurrent: req.body.isRecurrent,
+    recurrence: req.body.recurrence,
+    image: req.body.image,
   });
+
+  newActivity.save().then((activity) => {
+    if (activity) {
+      res.json({
+        result: true,
+        activity,
+      });
+    } else {
+      res.json({
+        result: false,
+        error: "New activity failed to be registered",
+      });
+    }
+  });
+});
 
 module.exports = router;
