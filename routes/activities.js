@@ -174,18 +174,20 @@ router.post("/geoloc", (req, res) => {
                 $lte: dateBoundaries[0][1],
               };
             } else if (dateBoundaries.length === 2) {
-              findFilters.date = {
-                $or: [
-                  {
+              findFilters.$or = [
+                {
+                  date: {
                     $gte: dateBoundaries[0][0],
                     $lte: dateBoundaries[0][1],
                   },
-                  {
+                },
+                {
+                  date: {
                     $gte: dateBoundaries[1][0],
                     $lte: dateBoundaries[1][1],
                   },
-                ],
-              };
+                },
+              ];
             }
           }
         });
