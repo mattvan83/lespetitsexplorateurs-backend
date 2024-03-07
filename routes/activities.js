@@ -271,6 +271,74 @@ router.get("/:id", (req, res) => {
   });
 });
 
+// GET all the activities of the user
+router.get("/allactivities/:token", (req, res) => {
+  User.findOne({ token: req.params.token }).then((data) => {
+    if (data) {
+      const userId = data._id;
+      // Collect all activities of the user sorted by increasing date of happening.
+      Activity.find({ author: userId})
+        .populate("organizer")
+        .then((activities) => {
+          if (activities.length) {
+            const activitiesMapped = activities.map((activity) => {
+                return {
+                  id: activity._id,
+                  imgUrl: activity.image,
+                  organizer: activity.organizer.organizerDetails.name,
+                  organizerImgUrl: activity.organizer.image,
+                  date: activity.date,
+                  name: activity.name,
+                  postalCode: activity.postalCode,
+                  city: activity.city,
+                  isLiked: activity.likes.includes(userId),
+                };
+              })
+              .sort((a, b) => a.date - b.date);
+
+             res.json({ result: true, activities: activitiesMapped});
+          } else {
+            res.json({ result: false, error: "No activity found in database",
+            });
+          }
+        });
+    } else {
+      res.json({ result: false, error: "User not found" });
+    }
+  });
+});
+
+// DELETE an activity
+router.delete('/', (req, res) => {
+  if (!checkBody(req.body, ['token', 'activityId'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+
+  User.findOne({ token: req.body.token }).then(user => {
+    if (user === null) {
+      res.json({ result: false, error: 'User not found' });
+      return;
+    }
+
+    Activity.findById(req.body.activityId)
+      .populate('author')
+      .then(activity => {
+        if (!activity) {
+          res.json({ result: false, error: 'Activity not found' });
+          return;
+        } else if (String(activity.author._id) !== String(user._id)) { // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
+          res.json({ result: false, error: 'Activity can only be deleted by its author' });
+          return;
+        }
+
+        Activity.deleteOne({ _id: activity._id }).then(() => {
+          res.json({ result: true });
+        });
+      });
+  });
+});
+
   //Create a new activity - POST
   router.post("/newActivity/:token", (req, res) => {
     User.findOne({ token: req.params.token }).then((data) => {

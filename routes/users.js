@@ -15,13 +15,13 @@ router.post('/signup', (req, res) => {
   }
 
   // Check if the user has not already been registered
-  User.findOne({ 
+  User.findOne({
     // Check if the username OR the email already exist
     $or: [
       { username: { $regex: new RegExp(req.body.username, 'i') } },
       { email: { $regex: new RegExp(req.body.email, 'i') } }
     ]
-    }).then(data => { 
+  }).then(data => {
     if (data === null) {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
@@ -50,10 +50,15 @@ router.post('/signin', (req, res) => {
   }
 
   User.findOne({ email: { $regex: new RegExp(req.body.email, 'i') } }).then(data => {
-    if (data && bcrypt.compareSync(req.body.password, data.password)) {
-      res.json({ result: true, token: data.token, username: data.username, userPreferences : data.userPreferences });
+    if (data === null) {
+      res.json({ result: false, error: 'User not found' });
+      return;
     } else {
-      res.json({ result: false, error: 'User not found or wrong password' });
+      if (data && bcrypt.compareSync(req.body.password, data.password)) {
+        res.json({ result: true, token: data.token, username: data.username, userPreferences: data.userPreferences });
+      } else {
+        res.json({ result: false, error: 'Wrong password' });
+      }
     }
   });
 });
@@ -70,7 +75,7 @@ router.get('/:id', (req, res) => {
         res.json({ result: false, error: 'User not found' });
       }
     });
-  });
+});
 
 // Update user preferences
 router.put('/updatePreferences', (req, res) => {
@@ -79,19 +84,19 @@ router.put('/updatePreferences', (req, res) => {
   User.find({ token: token })
     .then(data => {
       if (data) {
-        User.updateOne({ token: token }, { $set: { 'userPreferences.concernedAges' : req.body.concernedAges, 'userPreferences.radius' : req.body.radius, 'userPreferences.city' : req.body.city,'userPreferences.latitude' : req.body.latitude ,'userPreferences.longitude' : req.body.longitude} })
-        .then(data => {
-          if(data) {
-            res.json({ result: true });
-          } else {
-            res.json({ result: false, error: 'An error occured during update' });
-          }
-        });
+        User.updateOne({ token: token }, { $set: { 'userPreferences.concernedAges': req.body.concernedAges, 'userPreferences.radius': req.body.radius, 'userPreferences.city': req.body.city, 'userPreferences.latitude': req.body.latitude, 'userPreferences.longitude': req.body.longitude } })
+          .then(data => {
+            if (data) {
+              res.json({ result: true });
+            } else {
+              res.json({ result: false, error: 'An error occured during update' });
+            }
+          });
       } else {
         res.json({ result: false, error: 'User not found' });
       }
     });
-  });
+});
 
 
 module.exports = router;
