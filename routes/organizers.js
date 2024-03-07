@@ -7,10 +7,17 @@ const { checkBody } = require('../modules/checkBody');
 
 // GET all organizers if no geolocalisation data available
 router.get("/nogeoloc", (req, res) => {
-    User.find({ isOrganizer: true }).select('_id image organizerDetails.name').then((data) => {
+    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizerDetails.function').then((data) => {
         if (data) {
-            console.log(data)
-            res.json({ result: true, organizers: data });
+            const organizers = data.map(organizer => {
+                return {
+                    id: organizer._id,
+                    imgUrl: organizer.image,
+                    name: organizer.organizerDetails.name,
+                    function: organizer.organizerDetails.function,
+                  };
+            })
+            res.json({ result: true, organizers: organizers });
         } else {
             res.json({ result: false, error: "No results" });
         }
@@ -24,13 +31,14 @@ router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
         return;
       }
 
-    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizerDetails.longitude organizerDetails.latitude').then((data) => {
+    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizerDetails.function organizerDetails.longitude organizerDetails.latitude').then((data) => {
         if (data) {
             const organizers = data.map(organizer => {
                 return {
                     id: organizer._id,
                     imgUrl: organizer.image,
                     name: organizer.organizerDetails.name,
+                    function: organizer.organizerDetails.function,
                     longitude: organizer.organizerDetails.longitude,
                     latitude: organizer.organizerDetails.latitude,
                     distance: convertCoordsToKm(
