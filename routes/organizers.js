@@ -10,16 +10,16 @@ router.get("/nogeoloc", (req, res) => {
     User.find({ isOrganizer: true }).select('_id image organizerDetails.name').then((data) => {
         if (data) {
             console.log(data)
-            res.json({ result: true, organizer: data });
+            res.json({ result: true, organizers: data });
         } else {
             res.json({ result: false, error: "No results" });
         }
     });
 });
 
-router.get("/geoloc", (req, res) => {
+router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
     // We get the preferenceRadius from the Redux store
-    if (!checkBody(req.body, ["preferenceRadius", "latitude", "longitude"])) {
+    if (!checkBody(req.params, ["preferenceRadius", "latitude", "longitude"])) {
         res.json({ result: false, error: "Missing or empty fields" });
         return;
       }
@@ -35,8 +35,8 @@ router.get("/geoloc", (req, res) => {
                     latitude: organizer.organizerDetails.latitude,
                     distance: convertCoordsToKm(
                         {
-                          latitude: req.body.latitude,
-                          longitude: req.body.longitude,
+                          latitude: req.params.latitude,
+                          longitude: req.params.longitude,
                         },
                         {
                           latitude: organizer.organizerDetails.latitude,
@@ -46,10 +46,10 @@ router.get("/geoloc", (req, res) => {
             })
 
             const organizersFiltered = organizers.filter(
-                (organizer) => organizer.distance <= req.body.preferenceRadius
+                (organizer) => organizer.distance <= req.params.preferenceRadius
               );
 
-            res.json({ result: true, organizer: organizersFiltered });
+            res.json({ result: true, organizers: organizersFiltered });
         } else {
             res.json({ result: false, error: "No results" });
         }
