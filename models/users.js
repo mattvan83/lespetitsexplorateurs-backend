@@ -8,8 +8,8 @@ const getDefaultUserPreferences = () => {
     journeyMoments: [],
     priceMax: 50,
     city: "",
-    latitude: 0,
-    longitude: 0,
+    latitude: -200,
+    longitude: -200,
     radius: 50,
   };
 };
@@ -55,8 +55,8 @@ const getDefaultOrganizerDetails = () => {
     address: "",
     postalCode: "",
     city: "",
-    latitude: 0,
-    longitude: 0,
+    latitude: -200,
+    longitude: -200,
     followed: [],
     About: "",
     activities: [],

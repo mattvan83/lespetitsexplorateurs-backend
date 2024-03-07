@@ -1,19 +1,32 @@
 const moment = require("moment");
 
-const determineDateBoundaries = () => {
+function arraysHaveSameElements(array1, array2) {
+  if (array1.length !== array2.length) {
+    return false;
+  }
+
+  const sortedArray1 = array1.slice().sort();
+  const sortedArray2 = array2.slice().sort();
+
+  return sortedArray1.every((value, index) => value === sortedArray2[index]);
+}
+
+const determineDateBoundaries = (dateFilter) => {
   const weekDays = [1, 2, 3, 4, 5];
   const weekendDays = [0, 6];
 
-  const today = new Date("March 10, 2024 03:24:00");
-  //   const today = new Date();
+  const dateBoundaries = [];
+
+  //   const today = new Date("March 10, 2024 03:24:00");
+  const today = new Date();
   const todayEnd = new Date();
   todayEnd.setHours(23, 59, 59, 999);
   const todayDate = today.getDate();
   const todayDay = today.getDay();
-  console.log("today: ", today);
-  console.log("todayEnd: ", todayEnd);
-  console.log("todayDate: ", todayDate);
-  console.log("todayDay: ", todayDay);
+  // console.log("today: ", today);
+  // console.log("todayEnd: ", todayEnd);
+  // console.log("todayDate: ", todayDate);
+  // console.log("todayDay: ", todayDay);
 
   const tomorrowStart = new Date();
   tomorrowStart.setDate(todayDate + 1);
@@ -21,8 +34,8 @@ const determineDateBoundaries = () => {
   const tomorrowEnd = new Date();
   tomorrowEnd.setDate(todayDate + 1);
   tomorrowEnd.setHours(23, 59, 59, 999);
-  console.log("tomorrowStart: ", tomorrowStart);
-  console.log("tomorrowEnd: ", tomorrowEnd);
+  // console.log("tomorrowStart: ", tomorrowStart);
+  // console.log("tomorrowEnd: ", tomorrowEnd);
 
   let startOfWeek = new Date();
   if (weekDays.includes(todayDay)) {
@@ -35,7 +48,7 @@ const determineDateBoundaries = () => {
     }
     startOfWeek.setHours(0, 0, 0, 0);
   }
-  console.log("startOfWeek: ", startOfWeek);
+  // console.log("startOfWeek: ", startOfWeek);
 
   const endOfWeek = new Date();
   if (weekDays.includes(todayDay)) {
@@ -48,7 +61,7 @@ const determineDateBoundaries = () => {
     }
   }
   endOfWeek.setHours(23, 59, 59, 999);
-  console.log("endOfWeek: ", endOfWeek);
+  // console.log("endOfWeek: ", endOfWeek);
 
   let startOfWeekend = new Date();
   if (weekDays.includes(todayDay)) {
@@ -57,7 +70,7 @@ const determineDateBoundaries = () => {
   } else if (weekendDays.includes(todayDay)) {
     startOfWeekend = today;
   }
-  console.log("startOfWeekend: ", startOfWeekend);
+  // console.log("startOfWeekend: ", startOfWeekend);
 
   let endOfWeekend = new Date();
   if (weekDays.includes(todayDay)) {
@@ -71,9 +84,114 @@ const determineDateBoundaries = () => {
     }
     endOfWeekend.setHours(23, 59, 59, 999);
   }
-  console.log("endOfWeekend: ", endOfWeekend);
+  // console.log("endOfWeekend: ", endOfWeekend);
+
+  if (arraysHaveSameElements(dateFilter, ["Today"])) {
+    dateBoundaries.push([today, todayEnd]);
+  } else if (arraysHaveSameElements(dateFilter, ["Tomorrow"])) {
+    dateBoundaries.push([tomorrowStart, tomorrowEnd]);
+  } else if (arraysHaveSameElements(dateFilter, ["Week"])) {
+    dateBoundaries.push([startOfWeek, endOfWeek]);
+  } else if (arraysHaveSameElements(dateFilter, ["Weekend"])) {
+    dateBoundaries.push([startOfWeekend, endOfWeekend]);
+  } else if (arraysHaveSameElements(dateFilter, ["Week", "Weekend"])) {
+    if (weekDays.includes(todayDay)) {
+      dateBoundaries.push([startOfWeek, endOfWeekend]);
+    } else if (weekendDays.includes(todayDay)) {
+      dateBoundaries.push([startOfWeekend, endOfWeek]);
+    }
+  } else if (arraysHaveSameElements(dateFilter, ["Today", "Tomorrow"])) {
+    dateBoundaries.push([today, tomorrowEnd]);
+  } else if (arraysHaveSameElements(dateFilter, ["Today", "Weekend"])) {
+    if (weekDays.includes(todayDay)) {
+      dateBoundaries.push([today, todayEnd]);
+      dateBoundaries.push([startOfWeekend, endOfWeekend]);
+    } else if (weekendDays.includes(todayDay)) {
+      dateBoundaries.push([startOfWeekend, endOfWeekend]);
+    }
+  } else if (arraysHaveSameElements(dateFilter, ["Tomorrow", "Weekend"])) {
+    if (weekDays.includes(todayDay)) {
+      dateBoundaries.push([tomorrowStart, tomorrowEnd]);
+      dateBoundaries.push([startOfWeekend, endOfWeekend]);
+    } else if (todayDay === 6) {
+      dateBoundaries.push([startOfWeekend, endOfWeekend]);
+    } else if (todayDay === 0) {
+      dateBoundaries.push([startOfWeekend, tomorrowEnd]);
+    }
+  } else if (arraysHaveSameElements(dateFilter, ["Today", "Week"])) {
+    if (weekDays.includes(todayDay) || todayDay === 0) {
+      dateBoundaries.push([today, endOfWeek]);
+    } else if (todayDay === 6) {
+      dateBoundaries.push([today, todayEnd]);
+      dateBoundaries.push([startOfWeek, endOfWeek]);
+    }
+  } else if (arraysHaveSameElements(dateFilter, ["Tomorrow", "Week"])) {
+    if (weekDays.includes(todayDay) || todayDay === 6) {
+      dateBoundaries.push([tomorrowStart, endOfWeek]);
+    } else if (todayDay === 0) {
+      dateBoundaries.push([startOfWeek, endOfWeek]);
+    }
+  } else if (
+    arraysHaveSameElements(dateFilter, ["Today", "Tomorrow", "Weekend"])
+  ) {
+    if (todayDay === 1 || todayDay === 2 || todayDay === 3) {
+      dateBoundaries.push([today, tomorrowEnd]);
+      dateBoundaries.push([startOfWeekend, endOfWeekend]);
+    } else if (todayDay === 4 || todayDay === 5) {
+      dateBoundaries.push([today, endOfWeekend]);
+    } else if (todayDay === 6) {
+      dateBoundaries.push([startOfWeekend, endOfWeekend]);
+    } else if (todayDay === 0) {
+      dateBoundaries.push([today, tomorrowEnd]);
+    }
+  } else if (
+    arraysHaveSameElements(dateFilter, ["Today", "Tomorrow", "Week"])
+  ) {
+    if (
+      todayDay === 1 ||
+      todayDay === 2 ||
+      todayDay === 3 ||
+      todayDay === 6 ||
+      todayDay === 0
+    ) {
+      dateBoundaries.push([today, endOfWeek]);
+    } else if (todayDay === 4 || todayDay === 5) {
+      dateBoundaries.push([today, tomorrowEnd]);
+    }
+  } else if (
+    arraysHaveSameElements(dateFilter, ["Today", "Tomorrow", "Week", "Weekend"])
+  ) {
+    dateBoundaries.push([today, endOfWeekend]);
+  }
+
+  return dateBoundaries;
 };
 
-determineDateBoundaries();
+const determineTargetHours = (momentFilter) => {
+  if (arraysHaveSameElements(momentFilter, ["Morning"])) {
+    return [[0, 12]];
+  } else if (arraysHaveSameElements(momentFilter, ["Afternoon"])) {
+    return [[12, 18]];
+  } else if (arraysHaveSameElements(momentFilter, ["Evening"])) {
+    return [[18, 24]];
+  } else if (arraysHaveSameElements(momentFilter, ["Morning", "Afternoon"])) {
+    return [[0, 18]];
+  } else if (arraysHaveSameElements(momentFilter, ["Morning", "Evening"])) {
+    return [
+      [0, 12],
+      [18, 24],
+    ];
+  } else if (
+    arraysHaveSameElements(momentFilter, ["Morning", "Afternoon", "Evening"])
+  ) {
+    return [[0, 24]];
+  }
+};
 
-module.exports = { determineDateBoundaries };
+// const dateFilter = ["Today", "Weekend"];
+// console.log(determineDateBoundaries(dateFilter));
+
+// const momentFilter = ["Morning", "Evening"];
+// console.log(determineTargetHours(momentFilter));
+
+module.exports = { determineDateBoundaries, determineTargetHours };
