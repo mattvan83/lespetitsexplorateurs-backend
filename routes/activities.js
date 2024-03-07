@@ -308,60 +308,34 @@ router.get("/allactivities/:token", (req, res) => {
   });
 });
 
+// DELETE an activity
+router.delete('/', (req, res) => {
+  if (!checkBody(req.body, ['token', 'activityId'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
 
-//Get activities created by user
-router.get("/all/:token", (req, res) => {
-  User.findOne({ token: req.params.token }).then((data) => {
-    if (data) {
-      const userId = data._id;
-      // Collect all activities of the user
-      Activity.find({ author: userId }).then((activities) => {
-        if (activities.length) {
-          const activitiesMapped = activities.map((activity) => {
-            return {
-              id: activity._id,
-              imgUrl: activity.image,
-              organizer: activity.organizer.organizerDetails.name,
-              organizerImgUrl: activity.organizer.image,
-              date: activity.date,
-              name: activity.name,
-              postalCode: activity.postalCode,
-              city: activity.city,
-              isLiked: activity.likes.includes(userId),
-            };
-          })
-          res.json({ result: true, activities: activitiesMapped });
-        } else {
-          res.json({ result: false, error: "No activity found in database" });
+  User.findOne({ token: req.body.token }).then(user => {
+    if (user === null) {
+      res.json({ result: false, error: 'User not found' });
+      return;
+    }
+
+    Activity.findById(req.body.activityId)
+      .populate('author')
+      .then(activity => {
+        if (!activity) {
+          res.json({ result: false, error: 'Activity not found' });
+          return;
+        } else if (String(activity.author._id) !== String(user._id)) { // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
+          res.json({ result: false, error: 'Activity can only be deleted by its author' });
+          return;
         }
-      });
-    } else {
-      res.json({ result: false, error: "User not found" });
-    }
-  });
-});
 
-//Get activities
-router.get("/", (req, res) => {
-  Activity.find().then((activities) => {
-    if (activities.length) {
-      const activitiesMapped = activities.map((activity) => {
-        return {
-          id: activity._id,
-          imgUrl: activity.image,
-          organizer: activity.organizer.organizerDetails.name,
-          organizerImgUrl: activity.organizer.image,
-          date: activity.date,
-          name: activity.name,
-          postalCode: activity.postalCode,
-          city: activity.city,
-          isLiked: activity.likes.includes(userId),
-        };
-      })
-      res.json({ result: true, activities: activitiesMapped });
-    } else {
-      res.json({ result: false, error: "No activity found in database" });
-    }
+        Activity.deleteOne({ _id: activity._id }).then(() => {
+          res.json({ result: true });
+        });
+      });
   });
 });
 
