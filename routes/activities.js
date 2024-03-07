@@ -229,7 +229,7 @@ router.post("/geoloc", (req, res) => {
                 const targetHours = determineTargetHours(
                   userFiltersCleaned.momentFilter
                 );
-                const activityHour = date.getHours(activity.date);
+                const activityHour = activity.date.getHours();
 
                 if (targetHours.length === 1) {
                   return (
