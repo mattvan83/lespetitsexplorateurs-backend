@@ -103,19 +103,52 @@ router.put('/updatePreferences', (req, res) => {
 });
 
 // Organizer profile creation
-router.post('/newOrganizer/', async (req, res) => {
+router.post('/newOrganizer/:token', async (req, res) => {
   const photoPath = `./tmp/${uniqid()}.jpg`;
   const resultMove = await req.files.photoFromFront.mv(photoPath);
 
   if (!resultMove) {
     const resultCloudinary = await cloudinary.uploader.upload(photoPath)
-    res.json({ result: true, url: resultCloudinary.secure_url });    
+
+    const { name, title, about, postalCode, city, address, longitude, latitude } = req.body;
+
+    User.find({ token: req.params.token })
+      .then(data => {
+        if (data) {
+          User.updateOne({ token: req.params.token },
+            {
+              $set: {
+                isOrganizer: true,
+                image: resultCloudinary.secure_url,
+                'organizerDetails.name': name,
+                'organizerDetails.function': title,
+                'organizerDetails.About': about,
+                'organizerDetails.postalCode': postalCode,
+                'organizerDetails.city': city,
+                'organizerDetails.address': address,
+                'organizerDetails.longitude': longitude,
+                'organizerDetails.latitude': latitude,
+              }
+            })
+            .then(data => {
+              if (data) {
+                res.json({ result: true, url: resultCloudinary.secure_url });
+              } else {
+                res.json({ result: false, error: 'An error occured during update' });
+              }
+            });
+        } else {
+          res.json({ result: false, error: 'User not found' });
+        }
+      });
+
+    // res.json({ result: true, url: resultCloudinary.secure_url });    
   } else {
     res.json({ result: false, error: resultMove });
   }
 
   fs.unlinkSync(photoPath);
 
- });
+});
 
 module.exports = router;
