@@ -23,10 +23,10 @@ const determineDateBoundaries = (dateFilter) => {
   todayEnd.setHours(23, 59, 59, 999);
   const todayDate = today.getDate();
   const todayDay = today.getDay();
-  console.log("today: ", today);
-  console.log("todayEnd: ", todayEnd);
-  console.log("todayDate: ", todayDate);
-  console.log("todayDay: ", todayDay);
+  // console.log("today: ", today);
+  // console.log("todayEnd: ", todayEnd);
+  // console.log("todayDate: ", todayDate);
+  // console.log("todayDay: ", todayDay);
 
   const tomorrowStart = new Date();
   tomorrowStart.setDate(todayDate + 1);
@@ -34,8 +34,8 @@ const determineDateBoundaries = (dateFilter) => {
   const tomorrowEnd = new Date();
   tomorrowEnd.setDate(todayDate + 1);
   tomorrowEnd.setHours(23, 59, 59, 999);
-  console.log("tomorrowStart: ", tomorrowStart);
-  console.log("tomorrowEnd: ", tomorrowEnd);
+  // console.log("tomorrowStart: ", tomorrowStart);
+  // console.log("tomorrowEnd: ", tomorrowEnd);
 
   let startOfWeek = new Date();
   if (weekDays.includes(todayDay)) {
@@ -48,7 +48,7 @@ const determineDateBoundaries = (dateFilter) => {
     }
     startOfWeek.setHours(0, 0, 0, 0);
   }
-  console.log("startOfWeek: ", startOfWeek);
+  // console.log("startOfWeek: ", startOfWeek);
 
   const endOfWeek = new Date();
   if (weekDays.includes(todayDay)) {
@@ -61,7 +61,7 @@ const determineDateBoundaries = (dateFilter) => {
     }
   }
   endOfWeek.setHours(23, 59, 59, 999);
-  console.log("endOfWeek: ", endOfWeek);
+  // console.log("endOfWeek: ", endOfWeek);
 
   let startOfWeekend = new Date();
   if (weekDays.includes(todayDay)) {
@@ -70,7 +70,7 @@ const determineDateBoundaries = (dateFilter) => {
   } else if (weekendDays.includes(todayDay)) {
     startOfWeekend = today;
   }
-  console.log("startOfWeekend: ", startOfWeekend);
+  // console.log("startOfWeekend: ", startOfWeekend);
 
   let endOfWeekend = new Date();
   if (weekDays.includes(todayDay)) {
@@ -84,14 +84,7 @@ const determineDateBoundaries = (dateFilter) => {
     }
     endOfWeekend.setHours(23, 59, 59, 999);
   }
-  console.log("endOfWeekend: ", endOfWeekend);
-
-  const dateMapping = {
-    "Aujourd'hui": "Today",
-    Demain: "Tomorrow",
-    "Cette semaine": "Week",
-    "Ce week-end": "Weekend",
-  };
+  // console.log("endOfWeekend: ", endOfWeekend);
 
   if (arraysHaveSameElements(dateFilter, ["Today"])) {
     dateBoundaries.push([today, todayEnd]);
@@ -111,17 +104,15 @@ const determineDateBoundaries = (dateFilter) => {
     dateBoundaries.push([today, tomorrowEnd]);
   } else if (arraysHaveSameElements(dateFilter, ["Today", "Weekend"])) {
     if (weekDays.includes(todayDay)) {
-      dateBoundaries
-        .push([today, todayEnd])
-        .push([startOfWeekend, endOfWeekend]);
+      dateBoundaries.push([today, todayEnd]);
+      dateBoundaries.push([startOfWeekend, endOfWeekend]);
     } else if (weekendDays.includes(todayDay)) {
       dateBoundaries.push([startOfWeekend, endOfWeekend]);
     }
   } else if (arraysHaveSameElements(dateFilter, ["Tomorrow", "Weekend"])) {
     if (weekDays.includes(todayDay)) {
-      dateBoundaries
-        .push([tomorrowStart, tomorrowEnd])
-        .push([startOfWeekend, endOfWeekend]);
+      dateBoundaries.push([tomorrowStart, tomorrowEnd]);
+      dateBoundaries.push([startOfWeekend, endOfWeekend]);
     } else if (todayDay === 6) {
       dateBoundaries.push([startOfWeekend, endOfWeekend]);
     } else if (todayDay === 0) {
@@ -131,7 +122,8 @@ const determineDateBoundaries = (dateFilter) => {
     if (weekDays.includes(todayDay) || todayDay === 0) {
       dateBoundaries.push([today, endOfWeek]);
     } else if (todayDay === 6) {
-      dateBoundaries.push([today, todayEnd]).push([startOfWeek, endOfWeek]);
+      dateBoundaries.push([today, todayEnd]);
+      dateBoundaries.push([startOfWeek, endOfWeek]);
     }
   } else if (arraysHaveSameElements(dateFilter, ["Tomorrow", "Week"])) {
     if (weekDays.includes(todayDay) || todayDay === 6) {
@@ -143,9 +135,8 @@ const determineDateBoundaries = (dateFilter) => {
     arraysHaveSameElements(dateFilter, ["Today", "Tomorrow", "Weekend"])
   ) {
     if (todayDay === 1 || todayDay === 2 || todayDay === 3) {
-      dateBoundaries
-        .push([today, tomorrowEnd])
-        .push([startOfWeekend, endOfWeekend]);
+      dateBoundaries.push([today, tomorrowEnd]);
+      dateBoundaries.push([startOfWeekend, endOfWeekend]);
     } else if (todayDay === 4 || todayDay === 5) {
       dateBoundaries.push([today, endOfWeekend]);
     } else if (todayDay === 6) {
@@ -176,7 +167,31 @@ const determineDateBoundaries = (dateFilter) => {
   return dateBoundaries;
 };
 
-const dateFilter = ["Today", "Tomorrow"];
-console.log(determineDateBoundaries(dateFilter));
+const determineTargetHours = (momentFilter) => {
+  if (arraysHaveSameElements(momentFilter, ["Morning"])) {
+    return [[0, 12]];
+  } else if (arraysHaveSameElements(momentFilter, ["Afternoon"])) {
+    return [[12, 18]];
+  } else if (arraysHaveSameElements(momentFilter, ["Evening"])) {
+    return [[18, 24]];
+  } else if (arraysHaveSameElements(momentFilter, ["Morning", "Afternoon"])) {
+    return [[0, 18]];
+  } else if (arraysHaveSameElements(momentFilter, ["Morning", "Evening"])) {
+    return [
+      [0, 12],
+      [18, 24],
+    ];
+  } else if (
+    arraysHaveSameElements(momentFilter, ["Morning", "Afternoon", "Evening"])
+  ) {
+    return [[0, 24]];
+  }
+};
 
-module.exports = { determineDateBoundaries };
+// const dateFilter = ["Today", "Weekend"];
+// console.log(determineDateBoundaries(dateFilter));
+
+// const momentFilter = ["Morning", "Evening"];
+// console.log(determineTargetHours(momentFilter));
+
+module.exports = { determineDateBoundaries, determineTargetHours };
