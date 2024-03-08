@@ -339,4 +339,40 @@ router.delete('/', (req, res) => {
   });
 });
 
+// NEW activity PART 2: PHOTO à tester plus tard
+router.post('/newPhoto', async (req, res) => {
+  const photoPath = `./tmp/${uniqid()}.jpg`;
+  const resultMove = await req.files.photoFromFront.mv(photoPath);
+
+  if (!resultMove) {
+    const resultCloudinary = await cloudinary.uploader.upload(photoPath)
+
+    Activity.findById(req.params.id)
+      .then(data => {
+        if (data) {
+          Activity.updateOne({ _id: data._id },
+            {
+              $set: {
+                image: resultCloudinary.secure_url,
+              }
+            })
+            .then(data => {
+              if (data) {
+                res.json({ result: true, url: resultCloudinary.secure_url });
+              } else {
+                res.json({ result: false, error: 'An error occured during image upload' });
+              }
+            });
+        } else {
+          res.json({ result: false, error: 'Activity not found' });
+        }
+      });   
+  } else {
+    res.json({ result: false, error: resultMove });
+  }
+
+  fs.unlinkSync(photoPath);
+});
+
+
 module.exports = router;

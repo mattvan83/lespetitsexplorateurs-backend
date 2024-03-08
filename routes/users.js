@@ -102,15 +102,11 @@ router.put('/updatePreferences', (req, res) => {
     });
 });
 
-// Organizer profile creation
+// Organizer profile creation - PART 1: ADD DETAILS 
 router.post('/newOrganizer/:token', async (req, res) => {
-  const photoPath = `./tmp/${uniqid()}.jpg`;
-  const resultMove = await req.files.photoFromFront.mv(photoPath);
-
-  if (!resultMove) {
-    const resultCloudinary = await cloudinary.uploader.upload(photoPath)
-
+  console.log(req.body)
     const { name, title, about, postalCode, city, address, longitude, latitude } = req.body;
+    console.log(title)
 
     User.find({ token: req.params.token })
       .then(data => {
@@ -119,7 +115,6 @@ router.post('/newOrganizer/:token', async (req, res) => {
             {
               $set: {
                 isOrganizer: true,
-                image: resultCloudinary.secure_url,
                 'organizerDetails.name': name,
                 'organizerDetails.function': title,
                 'organizerDetails.About': about,
@@ -132,9 +127,39 @@ router.post('/newOrganizer/:token', async (req, res) => {
             })
             .then(data => {
               if (data) {
-                res.json({ result: true, url: resultCloudinary.secure_url });
+                res.json({ result: true });
               } else {
                 res.json({ result: false, error: 'An error occured during update' });
+              }
+            });
+        } else {
+          res.json({ result: false, error: 'User not found' });
+        }
+      });
+});
+
+// Organizer profile creation - PART 2: ADD PROFILE PIC
+router.post('/newOrganizerPhoto/:token', async (req, res) => {
+  const photoPath = `./tmp/${uniqid()}.jpg`;
+  const resultMove = await req.files.photoFromFront.mv(photoPath);
+
+  if (!resultMove) {
+    const resultCloudinary = await cloudinary.uploader.upload(photoPath)
+
+    User.find({ token: req.params.token })
+      .then(data => {
+        if (data) {
+          User.updateOne({ token: req.params.token },
+            {
+              $set: {
+                image: resultCloudinary.secure_url,
+              }
+            })
+            .then(data => {
+              if (data) {
+                res.json({ result: true, url: resultCloudinary.secure_url });
+              } else {
+                res.json({ result: false, error: 'An error occured during image upload' });
               }
             });
         } else {
