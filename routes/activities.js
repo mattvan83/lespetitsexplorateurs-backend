@@ -438,51 +438,55 @@ router.delete('/', (req, res) => {
 });
 
   //Create a new activity - POST
-  router.post("/newActivity", (req, res) => {
-    const requiredFields = ['name', 'description', 'category', 'address', 'date'];
-    if (!checkBody(req.body, requiredFields)) {
-          res.json({ result: false, error: "Missing or empty fields" });
-          return;
-        }
-        //id from fake bd:
-        //const userId = ObjectId('65e8350c87ae8d56cbb63ef1');
-        //const organizerId = ObjectId('65e77185e8a90dd96d5b27a1');
-        const createdAt = new Date();
-  
-        const newActivity = new Activity({
-          //author: userId,
-          //organizerId,
-          createdAt,
-          name: req.body.name,
-          description: req.body.description,
-          durationInMilliseconds: req.body.duration,
-          category: req.body.category,
-          concernedAges: req.body.concernedAges,
-          address: req.body.address,
-          postalCode: req.body.postalCode,
-          locationName: req.body.locationName,
-          latitude: req.body.latitude,
-          longitude: req.body.longitude,
-          city: req.body.city,
-          date: req.body.date,
-          isRecurrent: req.body.isRecurrent,
-          recurrence: req.body.recurrence,
-          image: req.body.image,
-        });
-  
-        newActivity.save().then((activity) => {
-          if (activity) {
-            res.json({
-              result: true,
-              activity,
-            });
-          } else {
-            res.json({
-              result: false,
-              error: "New activity failed to be registered",
-            });
+  router.post("/newActivity/:token", (req, res) => {
+    User.findOne({ token: req.params.token }).then((data) => {
+      if (!data) {
+        throw new Error('User not found'); // Rejet de la promesse si aucun utilisateur n'est trouvé
+      }
+      const requiredFields = [];
+      if (!checkBody(req.body, requiredFields)) {
+            res.json({ result: false, error: "Missing or empty fields" });
+            return;
           }
-        });
+         const createdAt = new Date();
+    
+          const newActivity = new Activity({
+            author: data._id,
+            organizer: data._id,
+            createdAt,
+            name: req.body.name,
+            description: req.body.description,
+            //durationInMilliseconds: req.body.duration,
+            category: categoryMapping[req.body.category],
+            concernedAges: ageMapping[req.body.concernedAges],
+            address: req.body.address,
+            postalCode: req.body.postalCode,
+            locationName: req.body.locationName,
+            //latitude: req.body.latitude,
+            //longitude: req.body.longitude,
+            city: req.body.city,
+            date: req.body.date,
+            //isRecurrent: req.body.isRecurrent,
+            //recurrence: req.body.recurrence,
+            image: req.body.image,
+          });
+    
+          newActivity.save().then((activity) => {
+            if (activity) {
+              res.json({
+                result: true,
+                activity,
+              });
+            } else {
+              res.json({
+                result: false,
+                error: "New activity failed to be registered",
+              });
+            }
+          });
+    }).catch((error) => {
+      res.status(500).json({ result: false, error: error.message }); // Capturer et gérer les erreurs ici
+    });
   });
 
 module.exports = router;
