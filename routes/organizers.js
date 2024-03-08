@@ -7,14 +7,15 @@ const { checkBody } = require('../modules/checkBody');
 
 // GET all organizers if no geolocalisation data available
 router.get("/nogeoloc", (req, res) => {
-    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizerDetails.function').then((data) => {
+    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizerDetails.title organizerDetails.about').then((data) => {
         if (data) {
             const organizers = data.map(organizer => {
                 return {
                     id: organizer._id,
                     imgUrl: organizer.image,
                     name: organizer.organizerDetails.name,
-                    function: organizer.organizerDetails.function,
+                    title: organizer.organizerDetails.title,
+                    about: organizer.organizerDetails.about,
                   };
             })
             res.json({ result: true, organizers: organizers });
@@ -31,7 +32,7 @@ router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
         return;
       }
 
-    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizerDetails.function organizerDetails.longitude organizerDetails.latitude').then((data) => {
+    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizer.organizerDetails.title organizer.organizerDetails.about organizerDetails.longitude organizerDetails.latitude').then((data) => {
         if (data) {
             const organizers = data.map(organizer => {
                 return {
