@@ -7,12 +7,10 @@ const {
   determineTargetHours,
 } = require("../modules/determineDateBoundaries");
 const { checkBody } = require("../modules/checkBody");
+const { invertMappingTable } = require("../modules/invertMapping");
 
 const User = require("../models/users");
 const Activity = require("../models/activities");
-
-const dateFilters = ["Aujourd'hui", "Demain", "Cette semaine", "Ce week-end"];
-const momentFilters = ["Matin", "Après-midi", "Soir"];
 
 const categoryMapping = {
   Sport: "Sport",
@@ -22,6 +20,8 @@ const categoryMapping = {
   Éveil: "Awakening",
 };
 
+const backToFrontCategoryMapping = invertMappingTable(categoryMapping);
+
 const ageMapping = {
   "3-12 mois": "3_12months",
   "1-3 ans": "1_3years",
@@ -29,6 +29,8 @@ const ageMapping = {
   "6-10 ans": "6_10years",
   "10+ ans": "10+years",
 };
+
+const backToFrontAgeMapping = invertMappingTable(ageMapping);
 
 const dateMapping = {
   "Aujourd'hui": "Today",
@@ -201,6 +203,24 @@ router.post("/geoloc", (req, res) => {
         .then((activities) => {
           if (activities.length) {
             const activitiesMapped = activities.map((activity) => {
+              // Mapping between backend and frontend categories
+              let frontCategory = "";
+              if (activity.category) {
+                frontCategory = backToFrontCategoryMapping[activity.category];
+              }
+
+              // Mapping between backend and frontend concernedAges
+              let frontConcernedAges = [];
+              console.log("activity.concernedAges: ", activity.concernedAges);
+              if (
+                Array.isArray(activity.concernedAges) &&
+                activity.concernedAges.length
+              ) {
+                frontConcernedAges = activity.concernedAges.map(
+                  (age) => backToFrontAgeMapping[age]
+                );
+              }
+
               return {
                 id: activity._id,
                 imgUrl: activity.image,
@@ -221,6 +241,11 @@ router.post("/geoloc", (req, res) => {
                     longitude: activity.longitude,
                   }
                 ),
+                description: activity.description,
+                locationName: activity.locationName,
+                concernedAges: frontConcernedAges,
+                category: frontCategory,
+                durationInMilliseconds: activity.durationInMilliseconds,
               };
             });
 
