@@ -32,7 +32,7 @@ router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
         return;
       }
 
-    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizer.organizerDetails.title organizer.organizerDetails.about organizerDetails.longitude organizerDetails.latitude').then((data) => {
+    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.longitude organizerDetails.latitude').then((data) => {
         if (data) {
             const organizers = data.map(organizer => {
                 return {
