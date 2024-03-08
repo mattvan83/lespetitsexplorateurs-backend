@@ -2,11 +2,7 @@ const mongoose = require("mongoose");
 
 const getDefaultUserPreferences = () => {
   return {
-    categories: [],
     concernedAges: [],
-    dates: [],
-    journeyMoments: [],
-    priceMax: 50,
     city: "",
     latitude: -200,
     longitude: -200,
@@ -15,33 +11,12 @@ const getDefaultUserPreferences = () => {
 };
 
 const UserPreferencesSchema = new mongoose.Schema({
-  categories: [String],
   concernedAges: [
     {
       type: String,
-      enum: [
-        "3_12months",
-        "12_24months",
-        "24_36months",
-        "3_6years",
-        "7_10years",
-        "10+years",
-      ],
+      enum: ["3_12months", "1_3years", "3_6years", "6_10years", "10+years"],
     },
   ],
-  dates: [
-    {
-      type: String,
-      enum: ["Today", "Tomorrow", "Week", "Month"],
-    },
-  ],
-  journeyMoments: [
-    {
-      type: String,
-      enum: ["Morning", "Noon", "Evening"],
-    },
-  ],
-  priceMax: Number,
   city: String,
   latitude: Number,
   longitude: Number,
@@ -51,28 +26,28 @@ const UserPreferencesSchema = new mongoose.Schema({
 const getDefaultOrganizerDetails = () => {
   return {
     name: "",
-    function: "",
+    title: "",
     address: "",
     postalCode: "",
     city: "",
     latitude: -200,
     longitude: -200,
     followed: [],
-    About: "",
+    about: "",
     activities: [],
   };
 };
 
 const OrganizerDetailsSchema = new mongoose.Schema({
   name: String,
-  function: String,
+  title: String,
   address: String,
   postalCode: String,
   city: String,
   latitude: Number,
   longitude: Number,
   followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
-  About: String,
+  about: String,
   activities: [{ type: mongoose.Schema.Types.ObjectId, ref: "activities" }],
 });
 
