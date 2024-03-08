@@ -211,7 +211,7 @@ router.post("/geoloc", (req, res) => {
 
               // Mapping between backend and frontend concernedAges
               let frontConcernedAges = [];
-              console.log("activity.concernedAges: ", activity.concernedAges);
+              // console.log("activity.concernedAges: ", activity.concernedAges);
               if (
                 Array.isArray(activity.concernedAges) &&
                 activity.concernedAges.length
@@ -398,92 +398,96 @@ router.delete("/", (req, res) => {
   });
 });
 
-  //Create a new activity - POST
-  router.post("/newActivity/:token", (req, res) => {
-    User.findOne({ token: req.params.token }).then((data) => {
+//Create a new activity - POST
+router.post("/newActivity/:token", (req, res) => {
+  User.findOne({ token: req.params.token })
+    .then((data) => {
       if (!data) {
-        throw new Error('User not found'); // Rejet de la promesse si aucun utilisateur n'est trouvé
+        throw new Error("User not found"); // Rejet de la promesse si aucun utilisateur n'est trouvé
       }
       const requiredFields = [];
       if (!checkBody(req.body, requiredFields)) {
-            res.json({ result: false, error: "Missing or empty fields" });
-            return;
-          }
-         const createdAt = new Date();
-    
-          const newActivity = new Activity({
-            author: data._id,
-            organizer: data._id,
-            createdAt,
-            name: req.body.name,
-            description: req.body.description,
-            //durationInMilliseconds: req.body.duration,
-            category: categoryMapping[req.body.category],
-            concernedAges: ageMapping[req.body.concernedAges],
-            address: req.body.address,
-            postalCode: req.body.postalCode,
-            locationName: req.body.locationName,
-            //latitude: req.body.latitude,
-            //longitude: req.body.longitude,
-            city: req.body.city,
-            date: req.body.date,
-            //isRecurrent: req.body.isRecurrent,
-            //recurrence: req.body.recurrence,
-            image: req.body.image,
+        res.json({ result: false, error: "Missing or empty fields" });
+        return;
+      }
+      const createdAt = new Date();
+
+      const newActivity = new Activity({
+        author: data._id,
+        organizer: data._id,
+        createdAt,
+        name: req.body.name,
+        description: req.body.description,
+        //durationInMilliseconds: req.body.duration,
+        category: categoryMapping[req.body.category],
+        concernedAges: ageMapping[req.body.concernedAges],
+        address: req.body.address,
+        postalCode: req.body.postalCode,
+        locationName: req.body.locationName,
+        //latitude: req.body.latitude,
+        //longitude: req.body.longitude,
+        city: req.body.city,
+        date: req.body.date,
+        //isRecurrent: req.body.isRecurrent,
+        //recurrence: req.body.recurrence,
+        image: req.body.image,
+      });
+
+      newActivity.save().then((activity) => {
+        if (activity) {
+          res.json({
+            result: true,
+            activity,
           });
-    
-          newActivity.save().then((activity) => {
-            if (activity) {
-              res.json({
-                result: true,
-                activity,
-              });
-            } else {
-              res.json({
-                result: false,
-                error: "New activity failed to be registered",
-              });
-            }
+        } else {
+          res.json({
+            result: false,
+            error: "New activity failed to be registered",
           });
-    }).catch((error) => {
+        }
+      });
+    })
+    .catch((error) => {
       res.status(500).json({ result: false, error: error.message }); // Capturer et gérer les erreurs ici
     });
-  });
+});
 
 // NEW activity PART 2: PHOTO à tester plus tard
-router.post('/newPhoto', async (req, res) => {
+router.post("/newPhoto", async (req, res) => {
   const photoPath = `./tmp/${uniqid()}.jpg`;
   const resultMove = await req.files.photoFromFront.mv(photoPath);
 
   if (!resultMove) {
-    const resultCloudinary = await cloudinary.uploader.upload(photoPath)
+    const resultCloudinary = await cloudinary.uploader.upload(photoPath);
 
-    Activity.findById(req.params.id)
-      .then(data => {
-        if (data) {
-          Activity.updateOne({ _id: data._id },
-            {
-              $set: {
-                image: resultCloudinary.secure_url,
-              }
-            })
-            .then(data => {
-              if (data) {
-                res.json({ result: true, url: resultCloudinary.secure_url });
-              } else {
-                res.json({ result: false, error: 'An error occured during image upload' });
-              }
+    Activity.findById(req.params.id).then((data) => {
+      if (data) {
+        Activity.updateOne(
+          { _id: data._id },
+          {
+            $set: {
+              image: resultCloudinary.secure_url,
+            },
+          }
+        ).then((data) => {
+          if (data) {
+            res.json({ result: true, url: resultCloudinary.secure_url });
+          } else {
+            res.json({
+              result: false,
+              error: "An error occured during image upload",
             });
-        } else {
-          res.json({ result: false, error: 'Activity not found' });
-        }
-      });   
+          }
+        });
+      } else {
+        res.json({ result: false, error: "Activity not found" });
+      }
+    });
   } else {
     res.json({ result: false, error: resultMove });
   }
 
   fs.unlinkSync(photoPath);
 });
-
 
 module.exports = router;

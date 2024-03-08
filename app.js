@@ -12,14 +12,11 @@ var activitiesRouter = require("./routes/activities");
 var organizersRouter = require("./routes/organizers");
 
 var app = express();
-const fileUpload = require('express-fileupload');
+const fileUpload = require("express-fileupload");
 app.use(fileUpload());
 
 const cors = require("cors");
 app.use(cors());
-
-const fileUpload = require('express-fileupload');
-app.use(fileUpload());
 
 app.use(logger("dev"));
 app.use(express.json());
