@@ -47,6 +47,11 @@ const activitySchema = mongoose.Schema({
     default: "",
   },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
+  price: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
 });
 
 const Activity = mongoose.model("activities", activitySchema);
