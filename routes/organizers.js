@@ -38,7 +38,8 @@ router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
                     id: organizer._id,
                     imgUrl: organizer.image,
                     name: organizer.organizerDetails.name,
-                    function: organizer.organizerDetails.function,
+                    title: organizer.organizerDetails.title,
+                    about: organizer.organizerDetails.about,
                     longitude: organizer.organizerDetails.longitude,
                     latitude: organizer.organizerDetails.latitude,
                     distance: convertCoordsToKm(

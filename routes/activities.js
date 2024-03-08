@@ -7,12 +7,10 @@ const {
   determineTargetHours,
 } = require("../modules/determineDateBoundaries");
 const { checkBody } = require("../modules/checkBody");
+const { invertMappingTable } = require("../modules/invertMapping");
 
 const User = require("../models/users");
 const Activity = require("../models/activities");
-
-const dateFilters = ["Aujourd'hui", "Demain", "Cette semaine", "Ce week-end"];
-const momentFilters = ["Matin", "Après-midi", "Soir"];
 
 const categoryMapping = {
   Sport: "Sport",
@@ -22,6 +20,8 @@ const categoryMapping = {
   Éveil: "Awakening",
 };
 
+const backToFrontCategoryMapping = invertMappingTable(categoryMapping);
+
 const ageMapping = {
   "3-12 mois": "3_12months",
   "1-3 ans": "1_3years",
@@ -29,6 +29,8 @@ const ageMapping = {
   "6-10 ans": "6_10years",
   "10+ ans": "10+years",
 };
+
+const backToFrontAgeMapping = invertMappingTable(ageMapping);
 
 const dateMapping = {
   "Aujourd'hui": "Today",
@@ -201,6 +203,24 @@ router.post("/geoloc", (req, res) => {
         .then((activities) => {
           if (activities.length) {
             const activitiesMapped = activities.map((activity) => {
+              // Mapping between backend and frontend categories
+              let frontCategory = "";
+              if (activity.category) {
+                frontCategory = backToFrontCategoryMapping[activity.category];
+              }
+
+              // Mapping between backend and frontend concernedAges
+              let frontConcernedAges = [];
+              console.log("activity.concernedAges: ", activity.concernedAges);
+              if (
+                Array.isArray(activity.concernedAges) &&
+                activity.concernedAges.length
+              ) {
+                frontConcernedAges = activity.concernedAges.map(
+                  (age) => backToFrontAgeMapping[age]
+                );
+              }
+
               return {
                 id: activity._id,
                 imgUrl: activity.image,
@@ -221,6 +241,11 @@ router.post("/geoloc", (req, res) => {
                     longitude: activity.longitude,
                   }
                 ),
+                description: activity.description,
+                locationName: activity.locationName,
+                concernedAges: frontConcernedAges,
+                category: frontCategory,
+                durationInMilliseconds: activity.durationInMilliseconds,
               };
             });
 
@@ -277,74 +302,6 @@ router.post("/geoloc", (req, res) => {
   });
 });
 
-router.get("/geoloc/:token/:latitude/:longitude", (req, res) => {
-  User.findOne({ token: req.params.token }).then((data) => {
-    if (data) {
-      // Get user ID and maximum radius of search (in kms) from user preferences
-      const userId = data._id;
-      //   const userPreferenceRadius = data.userPreferences.radius;
-      const userPreferenceRadius = 630;
-
-      // Collect all activities sorted by increasing distance from the user location.
-      // These activities distances are below than or equal to the user's maximum radius of search.
-      Activity.find()
-        .populate("organizer")
-        .then((activities) => {
-          if (activities.length) {
-            const activitiesMapped = activities.map((activity) => {
-              return {
-                id: activity._id,
-                imgUrl: activity.image,
-                organizer: activity.organizer.organizerDetails.name,
-                organizerImgUrl: activity.organizer.image,
-                date: activity.date,
-                name: activity.name,
-                postalCode: activity.postalCode,
-                city: activity.city,
-                isLiked: activity.likes.includes(userId),
-                distance: convertCoordsToKm(
-                  {
-                    latitude: req.params.latitude,
-                    longitude: req.params.longitude,
-                  },
-                  {
-                    latitude: activity.latitude,
-                    longitude: activity.longitude,
-                  }
-                ),
-              };
-            });
-
-            const activitiesFiltered = activitiesMapped.filter(
-              (activity) => activity.distance <= userPreferenceRadius
-            );
-
-            if (activitiesFiltered.length) {
-              res.json({
-                result: true,
-                activities: activitiesFiltered.sort(
-                  (a, b) => a.distance - b.distance
-                ),
-              });
-            } else {
-              res.json({
-                result: false,
-                error: `No activity found at less than ${userPreferenceRadius} kms`,
-              });
-            }
-          } else {
-            res.json({
-              result: false,
-              error: "No activity found in database",
-            });
-          }
-        });
-    } else {
-      res.json({ result: false, error: "User not found" });
-    }
-  });
-});
-
 //Get the activity informations for the ActivitySheet
 router.get("/:id", (req, res) => {
   const activityId = req.params.id;
@@ -375,11 +332,12 @@ router.get("/allactivities/:token", (req, res) => {
     if (data) {
       const userId = data._id;
       // Collect all activities of the user sorted by increasing date of happening.
-      Activity.find({ author: userId})
+      Activity.find({ author: userId })
         .populate("organizer")
         .then((activities) => {
           if (activities.length) {
-            const activitiesMapped = activities.map((activity) => {
+            const activitiesMapped = activities
+              .map((activity) => {
                 return {
                   id: activity._id,
                   imgUrl: activity.image,
@@ -394,10 +352,9 @@ router.get("/allactivities/:token", (req, res) => {
               })
               .sort((a, b) => a.date - b.date);
 
-             res.json({ result: true, activities: activitiesMapped});
+            res.json({ result: true, activities: activitiesMapped });
           } else {
-            res.json({ result: false, error: "No activity found in database",
-            });
+            res.json({ result: false, error: "No activity found in database" });
           }
         });
     } else {
@@ -407,26 +364,30 @@ router.get("/allactivities/:token", (req, res) => {
 });
 
 // DELETE an activity
-router.delete('/', (req, res) => {
-  if (!checkBody(req.body, ['token', 'activityId'])) {
-    res.json({ result: false, error: 'Missing or empty fields' });
+router.delete("/", (req, res) => {
+  if (!checkBody(req.body, ["token", "activityId"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
 
-  User.findOne({ token: req.body.token }).then(user => {
+  User.findOne({ token: req.body.token }).then((user) => {
     if (user === null) {
-      res.json({ result: false, error: 'User not found' });
+      res.json({ result: false, error: "User not found" });
       return;
     }
 
     Activity.findById(req.body.activityId)
-      .populate('author')
-      .then(activity => {
+      .populate("author")
+      .then((activity) => {
         if (!activity) {
-          res.json({ result: false, error: 'Activity not found' });
+          res.json({ result: false, error: "Activity not found" });
           return;
-        } else if (String(activity.author._id) !== String(user._id)) { // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
-          res.json({ result: false, error: 'Activity can only be deleted by its author' });
+        } else if (String(activity.author._id) !== String(user._id)) {
+          // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
+          res.json({
+            result: false,
+            error: "Activity can only be deleted by its author",
+          });
           return;
         }
 
@@ -437,52 +398,88 @@ router.delete('/', (req, res) => {
   });
 });
 
-  //Create a new activity - POST
-  router.post("/newActivity", (req, res) => {
-    const requiredFields = ['name', 'description', 'category', 'address', 'date'];
-    if (!checkBody(req.body, requiredFields)) {
-          res.json({ result: false, error: "Missing or empty fields" });
-          return;
-        }
-        //id from fake bd:
-        //const userId = ObjectId('65e8350c87ae8d56cbb63ef1');
-        //const organizerId = ObjectId('65e77185e8a90dd96d5b27a1');
-        const createdAt = new Date();
-  
-        const newActivity = new Activity({
-          //author: userId,
-          //organizerId,
-          createdAt,
-          name: req.body.name,
-          description: req.body.description,
-          durationInMilliseconds: req.body.duration,
-          category: req.body.category,
-          concernedAges: req.body.concernedAges,
-          address: req.body.address,
-          postalCode: req.body.postalCode,
-          locationName: req.body.locationName,
-          latitude: req.body.latitude,
-          longitude: req.body.longitude,
-          city: req.body.city,
-          date: req.body.date,
-          isRecurrent: req.body.isRecurrent,
-          recurrence: req.body.recurrence,
-          image: req.body.image,
-        });
-  
-        newActivity.save().then((activity) => {
-          if (activity) {
-            res.json({
-              result: true,
-              activity,
-            });
-          } else {
-            res.json({
-              result: false,
-              error: "New activity failed to be registered",
-            });
-          }
-        });
+//Create a new activity - POST
+router.post("/newActivity", (req, res) => {
+  const requiredFields = ["name", "description", "category", "address", "date"];
+  if (!checkBody(req.body, requiredFields)) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+  //id from fake bd:
+  //const userId = ObjectId('65e8350c87ae8d56cbb63ef1');
+  //const organizerId = ObjectId('65e77185e8a90dd96d5b27a1');
+  const createdAt = new Date();
+
+  const newActivity = new Activity({
+    //author: userId,
+    //organizerId,
+    createdAt,
+    name: req.body.name,
+    description: req.body.description,
+    durationInMilliseconds: req.body.duration,
+    category: req.body.category,
+    concernedAges: req.body.concernedAges,
+    address: req.body.address,
+    postalCode: req.body.postalCode,
+    locationName: req.body.locationName,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+    city: req.body.city,
+    date: req.body.date,
+    isRecurrent: req.body.isRecurrent,
+    recurrence: req.body.recurrence,
+    image: req.body.image,
   });
+
+  newActivity.save().then((activity) => {
+    if (activity) {
+      res.json({
+        result: true,
+        activity,
+      });
+    } else {
+      res.json({
+        result: false,
+        error: "New activity failed to be registered",
+      });
+    }
+  });
+});
+
+// NEW activity PART 2: PHOTO à tester plus tard
+router.post('/newPhoto', async (req, res) => {
+  const photoPath = `./tmp/${uniqid()}.jpg`;
+  const resultMove = await req.files.photoFromFront.mv(photoPath);
+
+  if (!resultMove) {
+    const resultCloudinary = await cloudinary.uploader.upload(photoPath)
+
+    Activity.findById(req.params.id)
+      .then(data => {
+        if (data) {
+          Activity.updateOne({ _id: data._id },
+            {
+              $set: {
+                image: resultCloudinary.secure_url,
+              }
+            })
+            .then(data => {
+              if (data) {
+                res.json({ result: true, url: resultCloudinary.secure_url });
+              } else {
+                res.json({ result: false, error: 'An error occured during image upload' });
+              }
+            });
+        } else {
+          res.json({ result: false, error: 'Activity not found' });
+        }
+      });   
+  } else {
+    res.json({ result: false, error: resultMove });
+  }
+
+  fs.unlinkSync(photoPath);
+});
+
 
 module.exports = router;

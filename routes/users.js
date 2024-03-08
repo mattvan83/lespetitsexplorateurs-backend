@@ -5,6 +5,10 @@ const User = require("../models/users");
 const { checkBody } = require('../modules/checkBody');
 const bcrypt = require('bcrypt');
 const uid2 = require('uid2');
+const uniqid = require('uniqid');
+
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
 
 /* ACCOUNT CREATION */
 router.post('/signup', (req, res) => {
@@ -98,5 +102,78 @@ router.put('/updatePreferences', (req, res) => {
     });
 });
 
+// Organizer profile creation - PART 1: ADD DETAILS 
+router.post('/newOrganizer/:token', async (req, res) => {
+  console.log(req.body)
+    const { name, title, about, postalCode, city, address, longitude, latitude } = req.body;
+    console.log(title)
+
+    User.find({ token: req.params.token })
+      .then(data => {
+        if (data) {
+          User.updateOne({ token: req.params.token },
+            {
+              $set: {
+                isOrganizer: true,
+                'organizerDetails.name': name,
+                'organizerDetails.function': title,
+                'organizerDetails.About': about,
+                'organizerDetails.postalCode': postalCode,
+                'organizerDetails.city': city,
+                'organizerDetails.address': address,
+                'organizerDetails.longitude': longitude,
+                'organizerDetails.latitude': latitude,
+              }
+            })
+            .then(data => {
+              if (data) {
+                res.json({ result: true });
+              } else {
+                res.json({ result: false, error: 'An error occured during update' });
+              }
+            });
+        } else {
+          res.json({ result: false, error: 'User not found' });
+        }
+      });
+});
+
+// Organizer profile creation - PART 2: ADD PROFILE PIC
+router.post('/newOrganizerPhoto/:token', async (req, res) => {
+  const photoPath = `./tmp/${uniqid()}.jpg`;
+  const resultMove = await req.files.photoFromFront.mv(photoPath);
+
+  if (!resultMove) {
+    const resultCloudinary = await cloudinary.uploader.upload(photoPath)
+
+    User.find({ token: req.params.token })
+      .then(data => {
+        if (data) {
+          User.updateOne({ token: req.params.token },
+            {
+              $set: {
+                image: resultCloudinary.secure_url,
+              }
+            })
+            .then(data => {
+              if (data) {
+                res.json({ result: true, url: resultCloudinary.secure_url });
+              } else {
+                res.json({ result: false, error: 'An error occured during image upload' });
+              }
+            });
+        } else {
+          res.json({ result: false, error: 'User not found' });
+        }
+      });
+
+    // res.json({ result: true, url: resultCloudinary.secure_url });    
+  } else {
+    res.json({ result: false, error: resultMove });
+  }
+
+  fs.unlinkSync(photoPath);
+
+});
 
 module.exports = router;

@@ -50,7 +50,7 @@ const activitySchema = mongoose.Schema({
   price: {
     type: Number,
     required: true,
-    default: 30,
+    default: 0,
   },
 });
 

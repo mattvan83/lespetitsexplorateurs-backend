@@ -12,6 +12,8 @@ var activitiesRouter = require("./routes/activities");
 var organizersRouter = require("./routes/organizers");
 
 var app = express();
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
 
 const cors = require("cors");
 app.use(cors());

@@ -111,6 +111,44 @@ const locationsHauterives = [
   },
 ];
 
+const activityExamples = [
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806689/ayhd0t2zcvyjw9walrxd.jpg",
+    activityName: "Bébés nageurs",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806689/nov76kiuz5sovyknrbss.jpg",
+    activityName: "Motricité",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/rvoaagsmc1azgnpyug6a.jpg",
+    activityName: "Ludothèque",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/yzymzwsdqzn2ua8juorw.jpg",
+    activityName: "Motricité",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/j2zemzydabou06lvpveq.png",
+    activityName: "Ukubébé",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806691/gurdmmxecu7ndfczjzpl.jpg",
+    activityName: "Atelier portage",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806691/yzbuvpyayuvkdz0sbkhc.png",
+    activityName: "Éveil muscial",
+  },
+];
+
 // // Replace 'your-api-key' with your OpenCage Geocoding API key
 // const OPEN_CAGE_API_KEY = "6f20d7cff5224c938e6ad01967cf66f8";
 
@@ -175,6 +213,36 @@ function hashPassword(password) {
   return bcrypt.hashSync(password, saltRounds);
 }
 
+function generateFutureDate() {
+  const delay = 15;
+  const currentDate = new Date();
+  const futureDate = faker.date.between(
+    currentDate,
+    new Date(currentDate.getTime() + delay * 24 * 60 * 60 * 1000)
+  );
+  return futureDate;
+}
+
+function generatePastDate() {
+  const delay = 30;
+  const currentDate = new Date();
+  const pastDate = faker.date.between(
+    new Date(currentDate.getTime() - delay * 24 * 60 * 60 * 1000),
+    currentDate
+  );
+  return pastDate;
+}
+
+function generateRandomSublist(list, maxSize) {
+  const shuffledList = faker.helpers.shuffle(list);
+  const sublistSize = faker.random.number({
+    min: 1,
+    max: Math.min(maxSize, shuffledList.length),
+  });
+  const sublist = shuffledList.slice(0, sublistSize);
+  return sublist;
+}
+
 // Asynchronous function to generate sample data
 async function generateSampleData() {
   // Generate sample users
@@ -185,14 +253,10 @@ async function generateSampleData() {
       faker.random.arrayElement(locationsHauterives);
 
     const userPreferences = {
-      categories: [],
       concernedAges: [],
-      dates: [],
-      journeyMoments: [],
-      priceMax: 50,
       city: "",
-      latitude: 0,
-      longitude: 0,
+      latitude: -200,
+      longitude: -200,
       radius: 50,
     };
 
@@ -200,26 +264,26 @@ async function generateSampleData() {
     const organizerDetails = isOrganizer
       ? {
           name: faker.company.companyName(),
-          function: faker.name.jobTitle(),
+          title: faker.name.jobTitle(),
           address: faker.address.streetAddress(),
           postalCode,
           latitude,
           longitude,
           city,
           followedBy: [],
-          About: faker.lorem.paragraph(),
+          about: faker.lorem.paragraph(),
           activities: [],
         }
       : {
           name: "",
-          function: "",
+          title: "",
           address: "",
           postalCode: "",
           city: "",
           latitude: 0,
           longitude: 0,
           followed: [],
-          About: "",
+          about: "",
           activities: [],
         };
 
@@ -227,7 +291,7 @@ async function generateSampleData() {
     const token = uid2(32); // Generate a token using uid2
 
     const user = {
-      createdAt: faker.date.past(),
+      createdAt: generatePastDate(),
       email: faker.internet.email(),
       username: faker.internet.userName(),
       password: hashedPassword,
@@ -254,11 +318,13 @@ async function generateSampleData() {
     const { latitude, longitude, postalCode, city } =
       faker.random.arrayElement(locationsHauterives);
 
+    const exampleActivity = faker.random.arrayElement(activityExamples);
+
     const activity = {
       author: "",
       organizer: "",
-      createdAt: faker.date.past(),
-      name: faker.lorem.words(3),
+      createdAt: generatePastDate(),
+      name: exampleActivity.activityName,
       description: faker.lorem.paragraph(),
       durationInMilliseconds: generateRandomDurationInMilliseconds(),
       category: faker.random.arrayElement([
@@ -268,21 +334,17 @@ async function generateSampleData() {
         "Motricity",
         "Awakening",
       ]),
-      concernedAges: faker.random.arrayElement([
-        "3_12months",
-        "12_24months",
-        "24_36months",
-        "3_6years",
-        "7_10years",
-        "10+years",
-      ]),
+      concernedAges: generateRandomSublist(
+        ["3_12months", "1_3years", "3_6years", "6_10years", "10+years"],
+        3
+      ),
       address: faker.address.streetAddress(),
       postalCode,
       locationName: faker.company.companyName(),
       latitude,
       longitude,
       city,
-      date: faker.date.future(),
+      date: generateFutureDate(),
       isRecurrent,
       recurrence: faker.random.arrayElement([
         "Daily",
@@ -291,12 +353,9 @@ async function generateSampleData() {
         "Monthly",
         "Yearly",
       ]),
-      image: faker.random.arrayElement([
-        "../assets/test/activity1.png",
-        "../assets/test/activity2.png",
-        "../assets/test/activity3.png",
-      ]),
+      image: exampleActivity.imgUrl,
       likes: [],
+      price: faker.random.number({ min: 0, max: 50 }),
     };
 
     activities.push(activity);
