@@ -111,6 +111,44 @@ const locationsHauterives = [
   },
 ];
 
+const activityExamples = [
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806689/ayhd0t2zcvyjw9walrxd.jpg",
+    activityName: "Bébés nageurs",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806689/nov76kiuz5sovyknrbss.jpg",
+    activityName: "Motricité",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/rvoaagsmc1azgnpyug6a.jpg",
+    activityName: "Ludothèque",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/yzymzwsdqzn2ua8juorw.jpg",
+    activityName: "Motricité",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/j2zemzydabou06lvpveq.png",
+    activityName: "Ukubébé",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806691/gurdmmxecu7ndfczjzpl.jpg",
+    activityName: "Atelier portage",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806691/yzbuvpyayuvkdz0sbkhc.png",
+    activityName: "Éveil muscial",
+  },
+];
+
 // // Replace 'your-api-key' with your OpenCage Geocoding API key
 // const OPEN_CAGE_API_KEY = "6f20d7cff5224c938e6ad01967cf66f8";
 
@@ -280,18 +318,13 @@ async function generateSampleData() {
     const { latitude, longitude, postalCode, city } =
       faker.random.arrayElement(locationsHauterives);
 
+    const exampleActivity = faker.random.arrayElement(activityExamples);
+
     const activity = {
       author: "",
       organizer: "",
       createdAt: generatePastDate(),
-      name: faker.random.arrayElement([
-        "Adventure",
-        "Exploration",
-        "Discovery",
-        "Fun",
-        "Outdoor",
-        "Excursion",
-      ]),
+      name: exampleActivity.activityName,
       description: faker.lorem.paragraph(),
       durationInMilliseconds: generateRandomDurationInMilliseconds(),
       category: faker.random.arrayElement([
@@ -320,11 +353,7 @@ async function generateSampleData() {
         "Monthly",
         "Yearly",
       ]),
-      image: faker.random.arrayElement([
-        "../assets/test/activity1.png",
-        "../assets/test/activity2.png",
-        "../assets/test/activity3.png",
-      ]),
+      image: exampleActivity.imgUrl,
       likes: [],
       price: faker.random.number({ min: 0, max: 50 }),
     };
