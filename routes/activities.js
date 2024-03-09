@@ -230,6 +230,8 @@ router.post("/geoloc", (req, res) => {
                 name: activity.name,
                 postalCode: activity.postalCode,
                 city: activity.city,
+                latitude: activity.latitude,
+                longitude: activity.longitude,
                 isLiked: activity.likes.includes(userId),
                 distance: convertCoordsToKm(
                   {
