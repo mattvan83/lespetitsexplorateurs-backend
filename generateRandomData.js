@@ -116,36 +116,43 @@ const activityExamples = [
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806689/ayhd0t2zcvyjw9walrxd.jpg",
     activityName: "Bébés nageurs",
+    activityCategory: "Sport",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806689/nov76kiuz5sovyknrbss.jpg",
     activityName: "Motricité",
+    activityCategory: "Motricité",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/rvoaagsmc1azgnpyug6a.jpg",
     activityName: "Ludothèque",
+    activityCategory: "Créativité",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/yzymzwsdqzn2ua8juorw.jpg",
     activityName: "Motricité",
+    activityCategory: "Motricité",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/j2zemzydabou06lvpveq.png",
     activityName: "Ukubébé",
+    activityCategory: "Musique",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806691/gurdmmxecu7ndfczjzpl.jpg",
     activityName: "Atelier portage",
+    activityCategory: "Éveil",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806691/yzbuvpyayuvkdz0sbkhc.png",
     activityName: "Éveil muscial",
+    activityCategory: "Éveil",
   },
 ];
 
@@ -327,13 +334,7 @@ async function generateSampleData() {
       name: exampleActivity.activityName,
       description: faker.lorem.paragraph(),
       durationInMilliseconds: generateRandomDurationInMilliseconds(),
-      category: faker.random.arrayElement([
-        "Sport",
-        "Music",
-        "Creativity",
-        "Motricity",
-        "Awakening",
-      ]),
+      category: exampleActivity.activityCategory,
       concernedAges: generateRandomSublist(
         ["3_12months", "1_3years", "3_6years", "6_10years", "10+years"],
         3
