@@ -7,7 +7,9 @@ const { checkBody } = require('../modules/checkBody');
 
 // GET all organizers if no geolocalisation data available
 router.get("/nogeoloc", (req, res) => {
-    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizerDetails.title organizerDetails.about').then((data) => {
+    User.find({ isOrganizer: true })
+    .populate("organizerDetails.activities")
+    .select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities').then((data) => {
         if (data) {
             const organizers = data.map(organizer => {
                 return {
@@ -16,6 +18,7 @@ router.get("/nogeoloc", (req, res) => {
                     name: organizer.organizerDetails.name,
                     title: organizer.organizerDetails.title,
                     about: organizer.organizerDetails.about,
+                    activities: organizer.organizerDetails.activities,
                   };
             })
             res.json({ result: true, organizers: organizers });
@@ -32,7 +35,9 @@ router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
         return;
       }
 
-    User.find({ isOrganizer: true }).select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.longitude organizerDetails.latitude').then((data) => {
+    User.find({ isOrganizer: true })
+    .populate("organizerDetails.activities")
+    .select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities organizerDetails.longitude organizerDetails.latitude').then((data) => {
         if (data) {
             const organizers = data.map(organizer => {
                 return {
@@ -41,6 +46,7 @@ router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
                     name: organizer.organizerDetails.name,
                     title: organizer.organizerDetails.title,
                     about: organizer.organizerDetails.about,
+                    activities: organizer.organizerDetails.activities,
                     longitude: organizer.organizerDetails.longitude,
                     latitude: organizer.organizerDetails.latitude,
                     distance: convertCoordsToKm(
