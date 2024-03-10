@@ -11,7 +11,15 @@ router.get("/:id", (req, res) => {
     .populate("organizerDetails.activities")
     .select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities').then((data) => {
         if (data) {
-            res.json({ result: true, organizer: data });
+            const organizer = {
+                    id: data._id,
+                    image: data.image,
+                    name: data.organizerDetails.name,
+                    title: data.organizerDetails.title,
+                    about: data.organizerDetails.about,
+                    activities: data.organizerDetails.activities,
+                  };
+            res.json({ result: true, organizer: organizer });
         } else {
             res.json({ result: false, error: "No results" });
         }
