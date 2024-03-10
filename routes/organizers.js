@@ -5,6 +5,19 @@ const User = require("../models/users");
 const { convertCoordsToKm } = require("../modules/computeDistance");
 const { checkBody } = require('../modules/checkBody');
 
+// GET organizer by Id
+router.get("/:id", (req, res) => {
+    User.findById( req.params.id)
+    .populate("organizerDetails.activities")
+    .select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities').then((data) => {
+        if (data) {
+            res.json({ result: true, organizer: data });
+        } else {
+            res.json({ result: false, error: "No results" });
+        }
+    });
+});
+
 // GET all organizers if no geolocalisation data available
 router.get("/nogeoloc", (req, res) => {
     User.find({ isOrganizer: true })
@@ -14,7 +27,7 @@ router.get("/nogeoloc", (req, res) => {
             const organizers = data.map(organizer => {
                 return {
                     id: organizer._id,
-                    imgUrl: organizer.image,
+                    image: organizer.image,
                     name: organizer.organizerDetails.name,
                     title: organizer.organizerDetails.title,
                     about: organizer.organizerDetails.about,
@@ -42,7 +55,7 @@ router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
             const organizers = data.map(organizer => {
                 return {
                     id: organizer._id,
-                    imgUrl: organizer.image,
+                    image: organizer.image,
                     name: organizer.organizerDetails.name,
                     title: organizer.organizerDetails.title,
                     about: organizer.organizerDetails.about,
