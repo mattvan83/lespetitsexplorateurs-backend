@@ -410,6 +410,11 @@ router.delete("/", (req, res) => {
             return;
           }
          const createdAt = new Date();
+
+         const ages = [];
+         for (let element of req.body.concernedAges) {
+          ages.push(ageMapping[element]);
+         }
     
           const newActivity = new Activity({
             author: data._id,
@@ -419,7 +424,7 @@ router.delete("/", (req, res) => {
             description: req.body.description,
             //durationInMilliseconds: req.body.duration,
             category: categoryMapping[req.body.category],
-            concernedAges: ageMapping[req.body.concernedAges],
+            concernedAges: ages,
             address: req.body.address,
             postalCode: req.body.postalCode,
             locationName: req.body.locationName,
@@ -484,6 +489,31 @@ router.post('/newPhoto', async (req, res) => {
 
   fs.unlinkSync(photoPath);
 });
+
+/*FAVORIS - Route PUT ajout à la liste des favoris
+router.put("/favorite/:activityId", (req, res) => {
+  const userId = data._id;
+
+  Activity.findById(req.params.activityId, (err, activity) => {
+    if (err || !activity) {
+      return res.json({ error: "Activity not found" });
+    }
+
+    // if activity is already liked by the user 
+    if (activity.likes.includes(userId)) {
+      return res.json({ error: "User already liked this activity" });
+    }
+
+    // add user's id to "likes" array in database activities
+    activity.likes.push(userId);
+    activity.save((err, updatedActivity) => {
+      if (err) {
+        return res.json({ error: "Failed to update activity" });
+      }
+      res.json({ message: "Activity liked successfully", activity: updatedActivity });
+    });
+  });
+});*/
 
 
 module.exports = router;
