@@ -156,6 +156,18 @@ const activityExamples = [
   },
 ];
 
+const organizersExamples = [
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806863/sl7oapoozkmcwoskbud9.png",
+    organizerName: "Le cerf volant",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806863/fwhd7vfta7guht7ilmwu.jpg",
+    organizerName: "Presque Pieds Nus",
+  },
+];
 // // Replace 'your-api-key' with your OpenCage Geocoding API key
 // const OPEN_CAGE_API_KEY = "6f20d7cff5224c938e6ad01967cf66f8";
 
@@ -303,7 +315,7 @@ async function generateSampleData() {
       username: faker.internet.userName(),
       password: hashedPassword,
       token,
-      image: faker.random.arrayElement([
+      imgUrl: faker.random.arrayElement([
         "../assets/test/profil1.png",
         "../assets/test/profil2.png",
       ]),
@@ -354,7 +366,7 @@ async function generateSampleData() {
         "Monthly",
         "Yearly",
       ]),
-      image: exampleActivity.imgUrl,
+      imgUrl: exampleActivity.imgUrl,
       likes: [],
       price: faker.random.number({ min: 0, max: 50 }),
     };

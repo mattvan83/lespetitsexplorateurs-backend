@@ -65,9 +65,9 @@ const momentMapping = {
 //               .map((activity) => {
 //                 return {
 //                   id: activity._id,
-//                   imgUrl: activity.image,
+//                   imgUrl: activity.imgUrl,
 //                   organizer: activity.organizer.organizerDetails.name,
-//                   organizerImgUrl: activity.organizer.image,
+//                   organizerImgUrl: activity.organizer.imgUrl,
 //                   organizerId: activity.organizer._id,
 //                   date: activity.date,
 //                   name: activity.name,
@@ -229,9 +229,9 @@ router.post("/nogeoloc", (req, res) => {
 
                 return {
                   id: activity._id,
-                  imgUrl: activity.image,
+                  imgUrl: activity.imgUrl,
                   organizer: activity.organizer.organizerDetails.name,
-                  organizerImgUrl: activity.organizer.image,
+                  organizerImgUrl: activity.organizer.imgUrl,
                   date: activity.date,
                   name: activity.name,
                   postalCode: activity.postalCode,
@@ -423,9 +423,9 @@ router.post("/geoloc", (req, res) => {
 
               return {
                 id: activity._id,
-                imgUrl: activity.image,
+                imgUrl: activity.imgUrl,
                 organizer: activity.organizer.organizerDetails.name,
-                organizerImgUrl: activity.organizer.image,
+                organizerImgUrl: activity.organizer.imgUrl,
                 organizerId: activity.organizer._id,
                 date: activity.date,
                 name: activity.name,
@@ -523,7 +523,7 @@ router.get("/:id", (req, res) => {
           locationName: activity.locationName,
           date: activity.date,
           duration: activity.durationInMilliseconds,
-          imgUrl: activity.image,
+          imgUrl: activity.imgUrl,
         },
       });
     } else {
@@ -546,9 +546,9 @@ router.get("/allactivities/:token", (req, res) => {
               .map((activity) => {
                 return {
                   id: activity._id,
-                  imgUrl: activity.image,
+                  imgUrl: activity.imgUrl,
                   organizer: activity.organizer.organizerDetails.name,
-                  organizerImgUrl: activity.organizer.image,
+                  organizerImgUrl: activity.organizer.imgUrl,
                   date: activity.date,
                   name: activity.name,
                   postalCode: activity.postalCode,
