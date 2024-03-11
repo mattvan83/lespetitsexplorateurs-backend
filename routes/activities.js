@@ -522,9 +522,6 @@ router.put("/favorite/:activityId", (req, res) => {
   });
 });*/
 
-
-module.exports = router;
-
 // Update activity
 router.post('/update/:id', (req, res) => {
   if (!checkBody(req.body, ["token"])) {
@@ -579,3 +576,5 @@ router.post('/update/:id', (req, res) => {
         });
     });
 });
+
+module.exports = router;
