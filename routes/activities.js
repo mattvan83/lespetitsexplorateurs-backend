@@ -1,5 +1,9 @@
 var express = require("express");
 var router = express.Router();
+const uniqid = require('uniqid');
+
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
 
 const { convertCoordsToKm } = require("../modules/computeDistance");
 const {
@@ -394,7 +398,7 @@ router.delete("/", (req, res) => {
         }
 
         Activity.deleteOne({ _id: activity._id }).then(() => {
-          res.json({ result: true });
+          res.json({ result: true, activityId : activity._id  });
         });
       });
   });
@@ -431,7 +435,7 @@ router.delete("/", (req, res) => {
             date: req.body.date,
             //isRecurrent: req.body.isRecurrent,
             //recurrence: req.body.recurrence,
-            image: req.body.image,
+            // image: req.body.image,
           });
     
           newActivity.save().then((activity) => {
@@ -453,7 +457,7 @@ router.delete("/", (req, res) => {
   });
 
 // NEW activity PART 2: PHOTO à tester plus tard
-router.post('/newPhoto', async (req, res) => {
+router.post('/newPhoto/:id', async (req, res) => {
   const photoPath = `./tmp/${uniqid()}.jpg`;
   const resultMove = await req.files.photoFromFront.mv(photoPath);
 
