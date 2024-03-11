@@ -314,7 +314,7 @@ router.get("/:id", (req, res) => {
 
   Activity.findById(activityId).then((activity) => {
     if (activity) {
-      res.json({
+      res.json({ result: true, activity: {
         organizer: activity.organizer,
         name: activity.name,
         description: activity.description,
@@ -324,7 +324,8 @@ router.get("/:id", (req, res) => {
         locationName: activity.locationName,
         date: activity.date,
         duration: activity.durationInMilliseconds,
-        image: activity.image,
+        imgUrl: activity.image,
+      }
       });
     } else {
       res.json({ error: "Activity not found" });
