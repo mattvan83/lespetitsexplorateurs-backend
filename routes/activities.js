@@ -1,5 +1,9 @@
 var express = require("express");
 var router = express.Router();
+const uniqid = require('uniqid');
+
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
 
 const { convertCoordsToKm } = require("../modules/computeDistance");
 const {
@@ -64,6 +68,7 @@ router.get("/nogeoloc/:token", (req, res) => {
                   imgUrl: activity.image,
                   organizer: activity.organizer.organizerDetails.name,
                   organizerImgUrl: activity.organizer.image,
+                  organizerId: activity.organizer._id,
                   date: activity.date,
                   name: activity.name,
                   postalCode: activity.postalCode,
@@ -226,6 +231,7 @@ router.post("/geoloc", (req, res) => {
                 imgUrl: activity.image,
                 organizer: activity.organizer.organizerDetails.name,
                 organizerImgUrl: activity.organizer.image,
+                organizerId: activity.organizer._id,
                 date: activity.date,
                 name: activity.name,
                 postalCode: activity.postalCode,
@@ -308,7 +314,7 @@ router.get("/:id", (req, res) => {
 
   Activity.findById(activityId).then((activity) => {
     if (activity) {
-      res.json({
+      res.json({ result: true, activity: {
         organizer: activity.organizer,
         name: activity.name,
         description: activity.description,
@@ -318,7 +324,8 @@ router.get("/:id", (req, res) => {
         locationName: activity.locationName,
         date: activity.date,
         duration: activity.durationInMilliseconds,
-        image: activity.image,
+        imgUrl: activity.image,
+      }
       });
     } else {
       res.json({ error: "Activity not found" });
@@ -392,7 +399,7 @@ router.delete("/", (req, res) => {
         }
 
         Activity.deleteOne({ _id: activity._id }).then(() => {
-          res.json({ result: true });
+          res.json({ result: true, activityId : activity._id  });
         });
       });
   });
@@ -429,7 +436,7 @@ router.delete("/", (req, res) => {
             date: req.body.date,
             //isRecurrent: req.body.isRecurrent,
             //recurrence: req.body.recurrence,
-            image: req.body.image,
+            // image: req.body.image,
           });
     
           newActivity.save().then((activity) => {
@@ -451,7 +458,7 @@ router.delete("/", (req, res) => {
   });
 
 // NEW activity PART 2: PHOTO à tester plus tard
-router.post('/newPhoto', async (req, res) => {
+router.post('/newPhoto/:id', async (req, res) => {
   const photoPath = `./tmp/${uniqid()}.jpg`;
   const resultMove = await req.files.photoFromFront.mv(photoPath);
 
@@ -487,3 +494,58 @@ router.post('/newPhoto', async (req, res) => {
 
 
 module.exports = router;
+
+// Update activity
+router.post('/update/:id', (req, res) => {
+  if (!checkBody(req.body, ["token"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  User.findOne({ token: req.body.token })
+    .then(user => {
+      if (user === null) {
+        res.json({ result: false, error: "User not found" });
+        return;
+      }
+      Activity.findById(req.params.id)
+        .populate("author")
+        .then((activity) => {
+          if (!activity) {
+            res.json({ result: false, error: "Activity not found" });
+            return;
+          } else if (String(activity.author._id) !== String(user._id)) {
+            // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
+            res.json({ result: false, error: "Activity can only be deleted by its author", });
+            return;
+          }
+  
+          Activity.updateOne({ _id: activity._id}, {
+            $set: {
+              name: req.body.name,
+              description: req.body.description,
+              //durationInMilliseconds: req.body.duration,
+              category: categoryMapping[req.body.category],
+              concernedAges: ageMapping[req.body.concernedAges],
+              address: req.body.address,
+              postalCode: req.body.postalCode,
+              locationName: req.body.locationName,
+              //latitude: req.body.latitude,
+              //longitude: req.body.longitude,
+              city: req.body.city,
+              date: req.body.date,
+              //isRecurrent: req.body.isRecurrent,
+              //recurrence: req.body.recurrence,
+              // image: req.body.image,
+            }
+          }).then(data => {
+            if (data) {
+              res.json({ result: true });
+            } else {
+              res.json({ result: false, error: 'An error occured during update' });
+            }
+          });
+  
+        });
+    });
+});
