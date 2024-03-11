@@ -494,3 +494,58 @@ router.post('/newPhoto/:id', async (req, res) => {
 
 
 module.exports = router;
+
+// Update activity
+router.put('/update/:id', (req, res) => {
+  if (!checkBody(req.body, ["token"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  User.findOne({ token: req.body.token })
+    .then(user => {
+      if (user === null) {
+        res.json({ result: false, error: "User not found" });
+        return;
+      }
+      Activity.findById(req.params.id)
+        .populate("author")
+        .then((activity) => {
+          if (!activity) {
+            res.json({ result: false, error: "Activity not found" });
+            return;
+          } else if (String(activity.author._id) !== String(user._id)) {
+            // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
+            res.json({ result: false, error: "Activity can only be deleted by its author", });
+            return;
+          }
+  
+          Activity.updateOne({ _id: activity._id}, {
+            $set: {
+              name: req.body.name,
+              description: req.body.description,
+              //durationInMilliseconds: req.body.duration,
+              category: categoryMapping[req.body.category],
+              concernedAges: ageMapping[req.body.concernedAges],
+              address: req.body.address,
+              postalCode: req.body.postalCode,
+              locationName: req.body.locationName,
+              //latitude: req.body.latitude,
+              //longitude: req.body.longitude,
+              city: req.body.city,
+              date: req.body.date,
+              //isRecurrent: req.body.isRecurrent,
+              //recurrence: req.body.recurrence,
+              // image: req.body.image,
+            }
+          }).then(data => {
+            if (data) {
+              res.json({ result: true });
+            } else {
+              res.json({ result: false, error: 'An error occured during update' });
+            }
+          });
+  
+        });
+    });
+});
