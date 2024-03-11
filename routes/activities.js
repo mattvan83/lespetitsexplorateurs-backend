@@ -1,9 +1,9 @@
 var express = require("express");
 var router = express.Router();
-const uniqid = require('uniqid');
+const uniqid = require("uniqid");
 
-const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
+const cloudinary = require("cloudinary").v2;
+const fs = require("fs");
 
 const { convertCoordsToKm } = require("../modules/computeDistance");
 const {
@@ -87,6 +87,201 @@ router.get("/nogeoloc/:token", (req, res) => {
               res.json({
                 result: true,
                 activities: activitiesMapped,
+              });
+            }
+          } else {
+            res.json({
+              result: false,
+              error: "No activity found in database",
+            });
+          }
+        });
+    } else {
+      res.json({ result: false, error: "User not found" });
+    }
+  });
+});
+
+router.post("/nogeoloc", (req, res) => {
+  if (!checkBody(req.body, ["token"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  User.findOne({ token: req.body.token }).then((data) => {
+    if (data) {
+      // Get user ID
+      const userId = data._id;
+
+      // Get filters set by the user and clean these filters to useful fields
+      const userFilters = req.body.filters;
+      const userFiltersCleanedKeys = Object.keys(userFilters).filter(
+        (key) =>
+          userFilters[key] &&
+          (!Array.isArray(userFilters[key]) || userFilters[key].length)
+      );
+
+      // Reconstruct a cleaned filters object
+      const userFiltersCleaned = {};
+      userFiltersCleanedKeys.forEach((key) => {
+        userFiltersCleaned[key] = userFilters[key];
+      });
+      console.log("userFiltersCleaned: ", userFiltersCleaned);
+
+      const findFilters = {};
+      if (userFilters) {
+        // Mapping between frontend and backend categories
+        if (userFiltersCleaned.categoryFilter) {
+          userFiltersCleaned.categoryFilter =
+            userFiltersCleaned.categoryFilter.map(
+              (category) => categoryMapping[category]
+            );
+        }
+
+        // Mapping between frontend and backend age
+        if (userFiltersCleaned.ageFilter) {
+          userFiltersCleaned.ageFilter = userFiltersCleaned.ageFilter.map(
+            (age) => ageMapping[age]
+          );
+        }
+
+        // Mapping between frontend and backend date
+        if (userFiltersCleaned.dateFilter) {
+          userFiltersCleaned.dateFilter = userFiltersCleaned.dateFilter.map(
+            (date) => dateMapping[date]
+          );
+        }
+
+        // Mapping between frontend and backend moment
+        if (userFiltersCleaned.momentFilter) {
+          userFiltersCleaned.momentFilter = userFiltersCleaned.momentFilter.map(
+            (moment) => momentMapping[moment]
+          );
+        }
+        console.log("userFiltersCleanedMapping: ", userFiltersCleaned);
+
+        // Build the dynamic filtering parameters for following mongoose find on activities
+        Object.keys(userFiltersCleaned).forEach((key) => {
+          if (key === "categoryFilter") {
+            findFilters.category = { $in: userFiltersCleaned[key] };
+          } else if (key === "ageFilter") {
+            findFilters.concernedAges = {
+              $in: userFiltersCleaned[key],
+            };
+          } else if (key === "priceFilter") {
+            findFilters.price = { $lte: userFiltersCleaned[key] };
+          } else if (key === "dateFilter") {
+            const dateBoundaries = determineDateBoundaries(
+              userFiltersCleaned[key]
+            );
+            console.log("dateBoundaries: ", dateBoundaries);
+            if (dateBoundaries.length === 1) {
+              findFilters.date = {
+                $gte: dateBoundaries[0][0],
+                $lte: dateBoundaries[0][1],
+              };
+            } else if (dateBoundaries.length === 2) {
+              findFilters.$or = [
+                {
+                  date: {
+                    $gte: dateBoundaries[0][0],
+                    $lte: dateBoundaries[0][1],
+                  },
+                },
+                {
+                  date: {
+                    $gte: dateBoundaries[1][0],
+                    $lte: dateBoundaries[1][1],
+                  },
+                },
+              ];
+            }
+          }
+        });
+      }
+      console.log("findFilters: ", findFilters);
+
+      // Collect all activities sorted by increasing date of happening.
+      // The number of these activities is limited to a maximum of 15.
+      Activity.find(findFilters)
+        .populate("organizer")
+        .then((activities) => {
+          if (activities.length) {
+            const activitiesMapped = activities
+              .map((activity) => {
+                // Mapping between backend and frontend categories
+                let frontCategory = "";
+                if (activity.category) {
+                  frontCategory = backToFrontCategoryMapping[activity.category];
+                }
+
+                // Mapping between backend and frontend concernedAges
+                let frontConcernedAges = [];
+                // console.log("activity.concernedAges: ", activity.concernedAges);
+                if (
+                  Array.isArray(activity.concernedAges) &&
+                  activity.concernedAges.length
+                ) {
+                  frontConcernedAges = activity.concernedAges.map(
+                    (age) => backToFrontAgeMapping[age]
+                  );
+                }
+
+                return {
+                  id: activity._id,
+                  imgUrl: activity.image,
+                  organizer: activity.organizer.organizerDetails.name,
+                  organizerImgUrl: activity.organizer.image,
+                  date: activity.date,
+                  name: activity.name,
+                  postalCode: activity.postalCode,
+                  city: activity.city,
+                  latitude: activity.latitude,
+                  longitude: activity.longitude,
+                  isLiked: activity.likes.includes(userId),
+                  description: activity.description,
+                  locationName: activity.locationName,
+                  concernedAges: frontConcernedAges,
+                  category: frontCategory,
+                  durationInMilliseconds: activity.durationInMilliseconds,
+                };
+              })
+              .sort((a, b) => a.date - b.date);
+
+            const activitiesFiltered = activitiesMapped.filter((activity) => {
+              if (userFiltersCleaned.momentFilter) {
+                const targetHours = determineTargetHours(
+                  userFiltersCleaned.momentFilter
+                );
+                const activityHour = activity.date.getHours();
+
+                if (targetHours.length === 1) {
+                  return (
+                    activityHour >= targetHours[0][0] &&
+                    activityHour < targetHours[0][1]
+                  );
+                } else if (targetHours.length === 2) {
+                  return (
+                    (activityHour >= targetHours[0][0] &&
+                      activityHour < targetHours[0][1]) ||
+                    (activityHour >= targetHours[1][0] &&
+                      activityHour < targetHours[1][1])
+                  );
+                }
+              } else {
+                return true;
+              }
+            });
+
+            if (activitiesFiltered.length > 15) {
+              res.json({
+                result: true,
+                activities: activitiesFiltered.slice(0, 15),
+              });
+            } else {
+              res.json({
+                result: true,
+                activities: activitiesFiltered,
               });
             }
           } else {
@@ -216,7 +411,7 @@ router.post("/geoloc", (req, res) => {
 
               // Mapping between backend and frontend concernedAges
               let frontConcernedAges = [];
-              console.log("activity.concernedAges: ", activity.concernedAges);
+              // console.log("activity.concernedAges: ", activity.concernedAges);
               if (
                 Array.isArray(activity.concernedAges) &&
                 activity.concernedAges.length
@@ -236,6 +431,8 @@ router.post("/geoloc", (req, res) => {
                 name: activity.name,
                 postalCode: activity.postalCode,
                 city: activity.city,
+                latitude: activity.latitude,
+                longitude: activity.longitude,
                 isLiked: activity.likes.includes(userId),
                 distance: convertCoordsToKm(
                   {
@@ -314,18 +511,20 @@ router.get("/:id", (req, res) => {
 
   Activity.findById(activityId).then((activity) => {
     if (activity) {
-      res.json({ result: true, activity: {
-        organizer: activity.organizer,
-        name: activity.name,
-        description: activity.description,
-        address: activity.address,
-        postalCode: activity.postalCode,
-        city: activity.city,
-        locationName: activity.locationName,
-        date: activity.date,
-        duration: activity.durationInMilliseconds,
-        imgUrl: activity.image,
-      }
+      res.json({
+        result: true,
+        activity: {
+          organizer: activity.organizer,
+          name: activity.name,
+          description: activity.description,
+          address: activity.address,
+          postalCode: activity.postalCode,
+          city: activity.city,
+          locationName: activity.locationName,
+          date: activity.date,
+          duration: activity.durationInMilliseconds,
+          imgUrl: activity.image,
+        },
       });
     } else {
       res.json({ error: "Activity not found" });
@@ -399,97 +598,102 @@ router.delete("/", (req, res) => {
         }
 
         Activity.deleteOne({ _id: activity._id }).then(() => {
-          res.json({ result: true, activityId : activity._id  });
+          res.json({ result: true, activityId: activity._id });
         });
       });
   });
 });
 
-  //Create a new activity - POST
-  router.post("/newActivity/:token", (req, res) => {
-    User.findOne({ token: req.params.token }).then((data) => {
+//Create a new activity - POST
+router.post("/newActivity/:token", (req, res) => {
+  User.findOne({ token: req.params.token })
+    .then((data) => {
       if (!data) {
-        throw new Error('User not found'); // Rejet de la promesse si aucun utilisateur n'est trouvé
+        throw new Error("User not found"); // Rejet de la promesse si aucun utilisateur n'est trouvé
       }
       const requiredFields = [];
       if (!checkBody(req.body, requiredFields)) {
-            res.json({ result: false, error: "Missing or empty fields" });
-            return;
-          }
-         const createdAt = new Date();
+        res.json({ result: false, error: "Missing or empty fields" });
+        return;
+      }
+      const createdAt = new Date();
 
-         const ages = [];
-         for (let element of req.body.concernedAges) {
-          ages.push(ageMapping[element]);
-         }
-    
-          const newActivity = new Activity({
-            author: data._id,
-            organizer: data._id,
-            createdAt,
-            name: req.body.name,
-            description: req.body.description,
-            //durationInMilliseconds: req.body.duration,
-            category: categoryMapping[req.body.category],
-            concernedAges: ages,
-            address: req.body.address,
-            postalCode: req.body.postalCode,
-            locationName: req.body.locationName,
-            //latitude: req.body.latitude,
-            //longitude: req.body.longitude,
-            city: req.body.city,
-            date: req.body.date,
-            //isRecurrent: req.body.isRecurrent,
-            //recurrence: req.body.recurrence,
-            // image: req.body.image,
+      const ages = [];
+      for (let element of req.body.concernedAges) {
+        ages.push(ageMapping[element]);
+      }
+
+      const newActivity = new Activity({
+        author: data._id,
+        organizer: data._id,
+        createdAt,
+        name: req.body.name,
+        description: req.body.description,
+        //durationInMilliseconds: req.body.duration,
+        category: categoryMapping[req.body.category],
+        concernedAges: ages,
+        address: req.body.address,
+        postalCode: req.body.postalCode,
+        locationName: req.body.locationName,
+        //latitude: req.body.latitude,
+        //longitude: req.body.longitude,
+        city: req.body.city,
+        date: req.body.date,
+        //isRecurrent: req.body.isRecurrent,
+        //recurrence: req.body.recurrence,
+        // image: req.body.image,
+      });
+
+      newActivity.save().then((activity) => {
+        if (activity) {
+          res.json({
+            result: true,
+            activity,
           });
-    
-          newActivity.save().then((activity) => {
-            if (activity) {
-              res.json({
-                result: true,
-                activity,
-              });
-            } else {
-              res.json({
-                result: false,
-                error: "New activity failed to be registered",
-              });
-            }
+        } else {
+          res.json({
+            result: false,
+            error: "New activity failed to be registered",
           });
-    }).catch((error) => {
+        }
+      });
+    })
+    .catch((error) => {
       res.status(500).json({ result: false, error: error.message }); // Capturer et gérer les erreurs ici
     });
-  });
+});
 
 // NEW activity PART 2: PHOTO à tester plus tard
-router.post('/newPhoto/:id', async (req, res) => {
+router.post("/newPhoto/:id", async (req, res) => {
   const photoPath = `./tmp/${uniqid()}.jpg`;
   const resultMove = await req.files.photoFromFront.mv(photoPath);
 
   if (!resultMove) {
-    const resultCloudinary = await cloudinary.uploader.upload(photoPath)
+    const resultCloudinary = await cloudinary.uploader.upload(photoPath);
 
-    Activity.findById(req.params.id)
-      .then(data => {
-        if (data) {
-          Activity.updateOne({ _id: data._id },
-            {
-              $set: {
-                image: resultCloudinary.secure_url,
-              }
-            })
-            .then(data => {
-              if (data) {
-                res.json({ result: true, url: resultCloudinary.secure_url });
-              } else {
-                res.json({ result: false, error: 'An error occured during image upload' });
-              }
+    Activity.findById(req.params.id).then((data) => {
+      if (data) {
+        Activity.updateOne(
+          { _id: data._id },
+          {
+            $set: {
+              image: resultCloudinary.secure_url,
+            },
+          }
+        ).then((data) => {
+          if (data) {
+            res.json({ result: true, url: resultCloudinary.secure_url });
+          } else {
+            res.json({
+              result: false,
+              error: "An error occured during image upload",
             });
-        } else {
-          res.json({ result: false, error: 'Activity not found' });
-        }
-      });   
+          }
+        });
+      } else {
+        res.json({ result: false, error: "Activity not found" });
+      }
+    });
   } else {
     res.json({ result: false, error: resultMove });
   }
@@ -523,31 +727,35 @@ router.put("/favorite/:activityId", (req, res) => {
 });*/
 
 // Update activity
-router.post('/update/:id', (req, res) => {
+router.post("/update/:id", (req, res) => {
   if (!checkBody(req.body, ["token"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
 
-  User.findOne({ token: req.body.token })
-    .then(user => {
-      if (user === null) {
-        res.json({ result: false, error: "User not found" });
-        return;
-      }
-      Activity.findById(req.params.id)
-        .populate("author")
-        .then((activity) => {
-          if (!activity) {
-            res.json({ result: false, error: "Activity not found" });
-            return;
-          } else if (String(activity.author._id) !== String(user._id)) {
-            // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
-            res.json({ result: false, error: "Activity can only be deleted by its author", });
-            return;
-          }
-  
-          Activity.updateOne({ _id: activity._id}, {
+  User.findOne({ token: req.body.token }).then((user) => {
+    if (user === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+    Activity.findById(req.params.id)
+      .populate("author")
+      .then((activity) => {
+        if (!activity) {
+          res.json({ result: false, error: "Activity not found" });
+          return;
+        } else if (String(activity.author._id) !== String(user._id)) {
+          // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
+          res.json({
+            result: false,
+            error: "Activity can only be deleted by its author",
+          });
+          return;
+        }
+
+        Activity.updateOne(
+          { _id: activity._id },
+          {
             $set: {
               name: req.body.name,
               description: req.body.description,
@@ -564,17 +772,20 @@ router.post('/update/:id', (req, res) => {
               //isRecurrent: req.body.isRecurrent,
               //recurrence: req.body.recurrence,
               // image: req.body.image,
-            }
-          }).then(data => {
-            if (data) {
-              res.json({ result: true });
-            } else {
-              res.json({ result: false, error: 'An error occured during update' });
-            }
-          });
-  
+            },
+          }
+        ).then((data) => {
+          if (data) {
+            res.json({ result: true });
+          } else {
+            res.json({
+              result: false,
+              error: "An error occured during update",
+            });
+          }
         });
-    });
+      });
+  });
 });
 
 module.exports = router;
