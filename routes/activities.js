@@ -496,7 +496,7 @@ router.post('/newPhoto/:id', async (req, res) => {
 module.exports = router;
 
 // Update activity
-router.put('/update/:id', (req, res) => {
+router.post('/update/:id', (req, res) => {
   if (!checkBody(req.body, ["token"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
