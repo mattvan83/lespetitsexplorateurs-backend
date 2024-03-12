@@ -49,59 +49,6 @@ const momentMapping = {
   Soir: "Evening",
 };
 
-// router.get("/nogeoloc/:token", (req, res) => {
-//   User.findOne({ token: req.params.token }).then((data) => {
-//     if (data) {
-//       // Get user ID
-//       const userId = data._id;
-
-//       // Collect all activities sorted by increasing date of happening.
-//       // The number of these activities is limited to a maximum of 15.
-//       Activity.find()
-//         .populate("organizer")
-//         .then((activities) => {
-//           if (activities.length) {
-//             const activitiesMapped = activities
-//               .map((activity) => {
-//                 return {
-//                   id: activity._id,
-//                   imgUrl: activity.imgUrl,
-//                   organizer: activity.organizer.organizerDetails.name,
-//                   organizerImgUrl: activity.organizer.imgUrl,
-//                   organizerId: activity.organizer._id,
-//                   date: activity.date,
-//                   name: activity.name,
-//                   postalCode: activity.postalCode,
-//                   city: activity.city,
-//                   isLiked: activity.likes.includes(userId),
-//                 };
-//               })
-//               .sort((a, b) => a.date - b.date);
-
-//             if (activitiesMapped.length > 15) {
-//               res.json({
-//                 result: true,
-//                 activities: activitiesMapped.slice(0, 15),
-//               });
-//             } else {
-//               res.json({
-//                 result: true,
-//                 activities: activitiesMapped,
-//               });
-//             }
-//           } else {
-//             res.json({
-//               result: false,
-//               error: "No activity found in database",
-//             });
-//           }
-//         });
-//     } else {
-//       res.json({ result: false, error: "User not found" });
-//     }
-//   });
-// });
-
 router.post("/nogeoloc", (req, res) => {
   if (!checkBody(req.body, ["token"])) {
     res.json({ result: false, error: "Missing or empty fields" });
