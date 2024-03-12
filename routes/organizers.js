@@ -9,11 +9,12 @@ const { checkBody } = require('../modules/checkBody');
 router.get("/byId/:id", (req, res) => {
     User.findById( req.params.id)
     .populate("organizerDetails.activities")
-    .select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities').then((data) => {
+    .then((data) => {
         if (data) {
+            console.log(data)
             const organizer = {
                     id: data._id,
-                    image: data.image,
+                    imgUrl: data.imgUrl,
                     name: data.organizerDetails.name,
                     title: data.organizerDetails.title,
                     about: data.organizerDetails.about,
@@ -30,13 +31,13 @@ router.get("/byId/:id", (req, res) => {
 router.get("/nogeoloc", (req, res) => {
     User.find({ isOrganizer: true })
     .populate("organizerDetails.activities")
-    .select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities')
+    .select('_id imgUrl organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities')
     .then((data) => {
         if (data) {
             const organizers = data.map(organizer => {
                 return {
                     id: organizer._id,
-                    image: organizer.image,
+                    imgUrl: organizer.imgUrl,
                     name: organizer.organizerDetails.name,
                     title: organizer.organizerDetails.title,
                     about: organizer.organizerDetails.about,
@@ -59,12 +60,13 @@ router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
 
     User.find({ isOrganizer: true })
     .populate("organizerDetails.activities")
-    .select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities organizerDetails.longitude organizerDetails.latitude').then((data) => {
+    // .select('_id imgUrl organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities organizerDetails.longitude organizerDetails.latitude')
+    .then((data) => {
         if (data) {
             const organizers = data.map(organizer => {
                 return {
                     id: organizer._id,
-                    image: organizer.image,
+                    imgUrl: organizer.imgUrl,
                     name: organizer.organizerDetails.name,
                     title: organizer.organizerDetails.title,
                     about: organizer.organizerDetails.about,
