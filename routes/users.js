@@ -116,7 +116,7 @@ router.post('/newOrganizer/:token', async (req, res) => {
               $set: {
                 isOrganizer: true,
                 'organizerDetails.name': name,
-                'organizerDetails.function': title,
+                'organizerDetails.title': title,
                 'organizerDetails.About': about,
                 'organizerDetails.postalCode': postalCode,
                 'organizerDetails.city': city,
@@ -152,7 +152,7 @@ router.post('/newOrganizerPhoto/:token', async (req, res) => {
           User.updateOne({ token: req.params.token },
             {
               $set: {
-                image: resultCloudinary.secure_url,
+                imgUrl: resultCloudinary.secure_url,
               }
             })
             .then(data => {
