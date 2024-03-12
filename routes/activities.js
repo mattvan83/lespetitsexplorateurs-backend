@@ -49,59 +49,6 @@ const momentMapping = {
   Soir: "Evening",
 };
 
-router.get("/nogeoloc/:token", (req, res) => {
-  User.findOne({ token: req.params.token }).then((data) => {
-    if (data) {
-      // Get user ID
-      const userId = data._id;
-
-      // Collect all activities sorted by increasing date of happening.
-      // The number of these activities is limited to a maximum of 15.
-      Activity.find()
-        .populate("organizer")
-        .then((activities) => {
-          if (activities.length) {
-            const activitiesMapped = activities
-              .map((activity) => {
-                return {
-                  id: activity._id,
-                  imgUrl: activity.imgUrl,
-                  organizer: activity.organizer.organizerDetails.name,
-                  organizerImgUrl: activity.organizer.imgUrl,
-                  organizerId: activity.organizer._id,
-                  date: activity.date,
-                  name: activity.name,
-                  postalCode: activity.postalCode,
-                  city: activity.city,
-                  isLiked: activity.likes.includes(userId),
-                };
-              })
-              .sort((a, b) => a.date - b.date);
-
-            if (activitiesMapped.length > 15) {
-              res.json({
-                result: true,
-                activities: activitiesMapped.slice(0, 15),
-              });
-            } else {
-              res.json({
-                result: true,
-                activities: activitiesMapped,
-              });
-            }
-          } else {
-            res.json({
-              result: false,
-              error: "No activity found in database",
-            });
-          }
-        });
-    } else {
-      res.json({ result: false, error: "User not found" });
-    }
-  });
-});
-
 router.post("/nogeoloc", (req, res) => {
   if (!checkBody(req.body, ["token"])) {
     res.json({ result: false, error: "Missing or empty fields" });
@@ -543,7 +490,7 @@ router.get("/allactivities/:token", (req, res) => {
         .populate("organizer")
         .then((activities) => {
           if (activities.length) {
-            console.log(activities)
+            console.log(activities);
             const activitiesMapped = activities
               .map((activity) => {
                 return {
@@ -711,35 +658,40 @@ router.post("/newPhoto/:id", async (req, res) => {
 });
 
 //FAVORIS - Route PUT modification de la liste des favoris
-router.put('/favorite/:token/:activityId', (req, res) => {
+router.put("/favorite/:token/:activityId", (req, res) => {
   User.findOne({ token: req.params.token })
     .then((data) => {
       if (!data) {
         throw new Error("User not found"); // Rejet de la promesse si aucun utilisateur n'est trouvé
       }
 
-    const activityId = req.params.activityId;
+      const activityId = req.params.activityId;
 
-    Activity.findById(activityId)
-      .then(activity => {
-        if (!activity) {
-          return res.json({ message: "Activity not found" });
-        }
+      Activity.findById(activityId)
+        .then((activity) => {
+          if (!activity) {
+            return res.json({ message: "Activity not found" });
+          }
 
-        // if user already liked the activity -> remove him from the 'likes' array
-        if (activity.likes.includes(data._id)) {
-          activity.likes = activity.likes.filter(userId => userId.toString() !== data._id.toString());
-        } else {
-          activity.likes.push(data._id);
-        }
-        
-        return activity.save();
-      })
-      .then(updatedActivity => {
-        res.json({ message: "Activity liked successfully", activity: updatedActivity  });
-      })
+          // if user already liked the activity -> remove him from the 'likes' array
+          if (activity.likes.includes(data._id)) {
+            activity.likes = activity.likes.filter(
+              (userId) => userId.toString() !== data._id.toString()
+            );
+          } else {
+            activity.likes.push(data._id);
+          }
+
+          return activity.save();
+        })
+        .then((updatedActivity) => {
+          res.json({
+            message: "Activity liked successfully",
+            activity: updatedActivity,
+          });
+        });
     })
-    .catch(error => {
+    .catch((error) => {
       console.error(error);
       res.json({ error: "Failed to update activity" });
     });
@@ -773,7 +725,10 @@ router.get("/favorite/:token", (req, res) => {
 
             res.json({ result: true, activities: activitiesMapped });
           } else {
-            res.json({ result: false, error: "No favorite activity found in database" });
+            res.json({
+              result: false,
+              error: "No favorite activity found in database",
+            });
           }
         });
     } else {

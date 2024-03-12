@@ -1,0 +1,222 @@
+[
+  {
+    "id": 0,
+    "cityName": "Romans-sur-Isère",
+    "postalCode": "26281",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      5.0477,
+      45.0611
+    ]
+  },
+  {
+    "id": 1,
+    "cityName": "Tain-l'Hermitage",
+    "postalCode": "26347",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.8488,
+      45.068
+    ]
+  },
+  {
+    "id": 2,
+    "cityName": "Valence",
+    "postalCode": "26362",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.9164,
+      44.9234
+    ]
+  },
+  {
+    "id": 3,
+    "cityName": "Bourg-de-Péage",
+    "postalCode": "26057",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      5.0492,
+      45.0189
+    ]
+  },
+  {
+    "id": 4,
+    "cityName": "Saint-Péray",
+    "postalCode": "07281",
+    "department": "Ardèche",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.8314,
+      44.9394
+    ]
+  },
+  {
+    "id": 5,
+    "cityName": "Saint-Marcellin",
+    "postalCode": "38416",
+    "department": "Isère",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      5.3166,
+      45.1526
+    ]
+  },
+  {
+    "id": 6,
+    "cityName": "Vienne",
+    "postalCode": "38544",
+    "department": "Isère",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.8803,
+      45.5221
+    ]
+  },
+  {
+    "id": 7,
+    "cityName": "Annonay",
+    "postalCode": "07010",
+    "department": "Ardèche",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.6419,
+      45.2449
+    ]
+  },
+  {
+    "id": 8,
+    "cityName": "Châteauneuf-sur-Isère",
+    "postalCode": "26084",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.9525,
+      45.0093
+    ]
+  },
+  {
+    "id": 9,
+    "cityName": "Loriol-sur-Drôme",
+    "postalCode": "26166",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.8141,
+      44.7495
+    ]
+  },
+  {
+    "id": 10,
+    "cityName": "Montélimar",
+    "postalCode": "26198",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.7454,
+      44.5545
+    ]
+  },
+  {
+    "id": 11,
+    "cityName": "Crest",
+    "postalCode": "26108",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      5.0211,
+      44.7311
+    ]
+  },
+  {
+    "id": 12,
+    "cityName": "Livron-sur-Drôme",
+    "postalCode": "26165",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.8257,
+      44.7912
+    ]
+  },
+  {
+    "id": 13,
+    "cityName": "Die",
+    "postalCode": "26113",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      5.3878,
+      44.7515
+    ]
+  },
+  {
+    "id": 14,
+    "cityName": "Donzère",
+    "postalCode": "26116",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.71,
+      44.4347
+    ]
+  },
+  {
+    "id": 15,
+    "cityName": "Saint-Rambert-d'Albon",
+    "postalCode": "26325",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.8299,
+      45.2883
+    ]
+  },
+  {
+    "id": 16,
+    "cityName": "Nyons",
+    "postalCode": "26220",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      5.1243,
+      44.3585
+    ]
+  },
+  {
+    "id": 17,
+    "cityName": "Saint-Vallier",
+    "postalCode": "26333",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.8201,
+      45.1794
+    ]
+  },
+  {
+    "id": 18,
+    "cityName": "Pierrelatte",
+    "postalCode": "26235",
+    "department": "Drôme",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.6887,
+      44.3634
+    ]
+  },
+  {
+    "id": 19,
+    "cityName": "Le Teil",
+    "postalCode": "07319",
+    "department": "Ardèche",
+    "region": "Auvergne-Rhône-Alpes",
+    "coords": [
+      4.6664,
+      44.5476
+    ]
+  }
+]

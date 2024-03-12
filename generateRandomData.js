@@ -4,112 +4,11 @@ const fetch = require("node-fetch");
 const faker = require("faker");
 const bcrypt = require("bcrypt");
 const uid2 = require("uid2"); // Import uid2
+const locationsHauterives = require("./test/sampleCities.json");
+
+// console.log(locationsHauterives);
 
 process.chdir(__dirname); // Set the current working directory to the script's directory
-
-// Set a basis of 20 locations within a radius of 50 kms from Hauterives/France
-const locationsHauterives = [
-  {
-    city: "Romans-sur-Isère",
-    latitude: 45.0434,
-    longitude: 5.0505,
-    postalCode: "26100",
-  },
-  {
-    city: "Tain-l'Hermitage",
-    latitude: 45.0703,
-    longitude: 4.8324,
-    postalCode: "26600",
-  },
-  {
-    city: "Valence",
-    latitude: 44.9333,
-    longitude: 4.8924,
-    postalCode: "26000",
-  },
-  {
-    city: "Bourg-de-Péage",
-    latitude: 45.0362,
-    longitude: 5.0556,
-    postalCode: "26300",
-  },
-  {
-    city: "Saint-Péray",
-    latitude: 44.9308,
-    longitude: 4.8481,
-    postalCode: "07130",
-  },
-  {
-    city: "Saint-Marcellin",
-    latitude: 45.1413,
-    longitude: 5.3239,
-    postalCode: "38160",
-  },
-  { city: "Vienne", latitude: 45.5281, longitude: 4.8784, postalCode: "38200" },
-  {
-    city: "Annonay",
-    latitude: 45.2393,
-    longitude: 4.6671,
-    postalCode: "07100",
-  },
-  {
-    city: "Châteauneuf-sur-Isère",
-    latitude: 45.0808,
-    longitude: 4.9213,
-    postalCode: "26300",
-  },
-  {
-    city: "Loriol-sur-Drôme",
-    latitude: 44.7518,
-    longitude: 4.8238,
-    postalCode: "26270",
-  },
-  {
-    city: "Montélimar",
-    latitude: 44.5569,
-    longitude: 4.7496,
-    postalCode: "26200",
-  },
-  { city: "Crest", latitude: 44.7284, longitude: 5.0226, postalCode: "26400" },
-  {
-    city: "Livron-sur-Drôme",
-    latitude: 44.7293,
-    longitude: 4.8312,
-    postalCode: "26250",
-  },
-  { city: "Die", latitude: 44.7531, longitude: 5.4928, postalCode: "26150" },
-  {
-    city: "Donzère",
-    latitude: 44.4283,
-    longitude: 4.7049,
-    postalCode: "26290",
-  },
-  {
-    city: "Saint-Rambert-d'Albon",
-    latitude: 45.2627,
-    longitude: 4.7918,
-    postalCode: "26140",
-  },
-  { city: "Nyons", latitude: 44.3592, longitude: 5.1318, postalCode: "26110" },
-  {
-    city: "Saint-Vallier",
-    latitude: 45.1616,
-    longitude: 4.8603,
-    postalCode: "26240",
-  },
-  {
-    city: "Pierrelatte",
-    latitude: 44.3749,
-    longitude: 4.6981,
-    postalCode: "26700",
-  },
-  {
-    city: "Le Teil",
-    latitude: 44.5504,
-    longitude: 4.7039,
-    postalCode: "07400",
-  },
-];
 
 const activityExamples = [
   {
@@ -122,40 +21,76 @@ const activityExamples = [
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806689/nov76kiuz5sovyknrbss.jpg",
     activityName: "Motricité",
-    activityCategory: "Motricité",
+    activityCategory: "Motricity",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/rvoaagsmc1azgnpyug6a.jpg",
     activityName: "Ludothèque",
-    activityCategory: "Créativité",
+    activityCategory: "Creativity",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/yzymzwsdqzn2ua8juorw.jpg",
     activityName: "Motricité",
-    activityCategory: "Motricité",
+    activityCategory: "Motricity",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806690/j2zemzydabou06lvpveq.png",
     activityName: "Ukubébé",
-    activityCategory: "Musique",
+    activityCategory: "Music",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806691/gurdmmxecu7ndfczjzpl.jpg",
     activityName: "Atelier portage",
-    activityCategory: "Éveil",
+    activityCategory: "Awakening",
   },
   {
     imgUrl:
       "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806691/yzbuvpyayuvkdz0sbkhc.png",
     activityName: "Éveil muscial",
-    activityCategory: "Éveil",
+    activityCategory: "Awakening",
   },
 ];
 
+const organizersExamples = [
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806863/sl7oapoozkmcwoskbud9.png",
+    organizerName: "Le Cerf Volant",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1709806863/fwhd7vfta7guht7ilmwu.jpg",
+    organizerName: "Presque Pieds Nus",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1710250433/q9uvokvuwjmq1zr61vsn.png",
+    organizerName: "Les Enfants d'Abord",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1710250433/m7lpzwpirb9rx4rv8kmd.png",
+    organizerName: "A.P.E.L.B",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1710250433/cutu4dn9eknmhpqigcvd.jpg",
+    organizerName: "APE",
+  },
+  {
+    imgUrl:
+      "https://res.cloudinary.com/ddoqxafok/image/upload/v1710250433/hwoxritsynaxhc9ovurz.webp",
+    organizerName: "Les Minimômes",
+  },
+  {
+    imgUrl: "",
+    organizerName: "",
+  },
+];
 // // Replace 'your-api-key' with your OpenCage Geocoding API key
 // const OPEN_CAGE_API_KEY = "6f20d7cff5224c938e6ad01967cf66f8";
 
@@ -256,8 +191,16 @@ async function generateSampleData() {
   const users = [];
   for (let i = 0; i < 20; i++) {
     // const { latitude, longitude, city } = await getRandomCoordinates();
-    const { latitude, longitude, postalCode, city } =
-      faker.random.arrayElement(locationsHauterives);
+    // const { latitude, longitude, postalCode, city } =
+    //   faker.random.arrayElement(locationsHauterives);
+    const location = {
+      latitude: locationsHauterives[i].coords[1],
+      longitude: locationsHauterives[i].coords[0],
+      postalCode: locationsHauterives[i].postalCode,
+      city: locationsHauterives[i].cityName,
+    };
+
+    const exampleOrganizer = faker.random.arrayElement(organizersExamples);
 
     const userPreferences = {
       concernedAges: [],
@@ -270,13 +213,13 @@ async function generateSampleData() {
     const isOrganizer = i % 2 === 0; // Every other user is an organizer
     const organizerDetails = isOrganizer
       ? {
-          name: faker.company.companyName(),
+          name: exampleOrganizer.organizerName,
           title: faker.name.jobTitle(),
           address: faker.address.streetAddress(),
-          postalCode,
-          latitude,
-          longitude,
-          city,
+          postalCode: location.postalCode,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          city: location.city,
           followedBy: [],
           about: faker.lorem.paragraph(),
           activities: [],
@@ -287,8 +230,8 @@ async function generateSampleData() {
           address: "",
           postalCode: "",
           city: "",
-          latitude: 0,
-          longitude: 0,
+          latitude: -200,
+          longitude: -200,
           followed: [],
           about: "",
           activities: [],
@@ -303,10 +246,7 @@ async function generateSampleData() {
       username: faker.internet.userName(),
       password: hashedPassword,
       token,
-      image: faker.random.arrayElement([
-        "../assets/test/profil1.png",
-        "../assets/test/profil2.png",
-      ]),
+      imgUrl: isOrganizer ? exampleOrganizer.imgUrl : "",
       followedBy: [],
       userPreferences: userPreferences,
       isOrganizer,
@@ -322,8 +262,14 @@ async function generateSampleData() {
     const isRecurrent = faker.random.boolean();
 
     // const { latitude, longitude, city } = await getRandomCoordinates();
-    const { latitude, longitude, postalCode, city } =
-      faker.random.arrayElement(locationsHauterives);
+    // const { latitude, longitude, postalCode, city } =
+    //   faker.random.arrayElement(locationsHauterives);
+    const location = {
+      latitude: locationsHauterives[i].coords[1],
+      longitude: locationsHauterives[i].coords[0],
+      postalCode: locationsHauterives[i].postalCode,
+      city: locationsHauterives[i].cityName,
+    };
 
     const exampleActivity = faker.random.arrayElement(activityExamples);
 
@@ -340,11 +286,11 @@ async function generateSampleData() {
         3
       ),
       address: faker.address.streetAddress(),
-      postalCode,
+      postalCode: location.postalCode,
       locationName: faker.company.companyName(),
-      latitude,
-      longitude,
-      city,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      city: location.city,
       date: generateFutureDate(),
       isRecurrent,
       recurrence: faker.random.arrayElement([
@@ -354,7 +300,7 @@ async function generateSampleData() {
         "Monthly",
         "Yearly",
       ]),
-      image: exampleActivity.imgUrl,
+      imgUrl: exampleActivity.imgUrl,
       likes: [],
       price: faker.random.number({ min: 0, max: 50 }),
     };
