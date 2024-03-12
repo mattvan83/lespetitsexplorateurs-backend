@@ -557,6 +557,7 @@ router.get("/allactivities/:token", (req, res) => {
                   organizerImgUrl: activity.organizer.image,
                   date: activity.date,
                   name: activity.name,
+                  address: activity.address,
                   postalCode: activity.postalCode,
                   city: activity.city,
                   locationName: activity.locationName,
