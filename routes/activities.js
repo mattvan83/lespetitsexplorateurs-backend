@@ -542,6 +542,7 @@ router.get("/allactivities/:token", (req, res) => {
         .populate("organizer")
         .then((activities) => {
           if (activities.length) {
+            console.log(activities)
             const activitiesMapped = activities
               .map((activity) => {
                 return {
@@ -733,7 +734,7 @@ router.put("/favorite/:activityId", (req, res) => {
 });*/
 
 // Update activity
-router.post("/update/:id", (req, res) => {
+router.put("/update", (req, res) => {
   if (!checkBody(req.body, ["token"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
@@ -744,7 +745,7 @@ router.post("/update/:id", (req, res) => {
       res.json({ result: false, error: "User not found" });
       return;
     }
-    Activity.findById(req.params.id)
+    Activity.findById(req.body.id)
       .populate("author")
       .then((activity) => {
         if (!activity) {
