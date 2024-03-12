@@ -701,30 +701,77 @@ router.post("/newPhoto/:id", async (req, res) => {
   fs.unlinkSync(photoPath);
 });
 
-/*FAVORIS - Route PUT ajout à la liste des favoris
-router.put("/favorite/:activityId", (req, res) => {
-  const userId = data._id;
-
-  Activity.findById(req.params.activityId, (err, activity) => {
-    if (err || !activity) {
-      return res.json({ error: "Activity not found" });
-    }
-
-    // if activity is already liked by the user 
-    if (activity.likes.includes(userId)) {
-      return res.json({ error: "User already liked this activity" });
-    }
-
-    // add user's id to "likes" array in database activities
-    activity.likes.push(userId);
-    activity.save((err, updatedActivity) => {
-      if (err) {
-        return res.json({ error: "Failed to update activity" });
+//FAVORIS - Route PUT modification de la liste des favoris
+router.put('/favorite/:token/:activityId', (req, res) => {
+  User.findOne({ token: req.params.token })
+    .then((data) => {
+      if (!data) {
+        throw new Error("User not found"); // Rejet de la promesse si aucun utilisateur n'est trouvé
       }
-      res.json({ message: "Activity liked successfully", activity: updatedActivity });
+
+    const activityId = req.params.activityId;
+
+    Activity.findById(activityId)
+      .then(activity => {
+        if (!activity) {
+          return res.json({ message: "Activity not found" });
+        }
+
+        // if user already liked the activity -> remove him from the 'likes' array
+        if (activity.likes.includes(data._id)) {
+          activity.likes = activity.likes.filter(userId => userId.toString() !== data._id.toString());
+        } else {
+          activity.likes.push(data._id);
+        }
+        
+        return activity.save();
+      })
+      .then(updatedActivity => {
+        res.json({ message: "Activity liked successfully", activity: updatedActivity  });
+      })
+    })
+    .catch(error => {
+      console.error(error);
+      res.json({ error: "Failed to update activity" });
     });
+});
+
+// GET the favorite activities of the user
+router.get("/favorite/:token", (req, res) => {
+  User.findOne({ token: req.params.token }).then((data) => {
+    if (data) {
+      const userId = data._id;
+      // Collect all activities of the user sorted by increasing date of happening.
+      Activity.find({ author: userId })
+        .populate("organizer")
+        .then((activities) => {
+          if (activities.length) {
+            const activitiesMapped = activities
+              .map((activity) => {
+                return {
+                  id: activity._id,
+                  imgUrl: activity.image,
+                  organizer: activity.organizer.organizerDetails.name,
+                  organizerImgUrl: activity.organizer.image,
+                  date: activity.date,
+                  name: activity.name,
+                  postalCode: activity.postalCode,
+                  city: activity.city,
+                  isLiked: activity.likes.includes(userId),
+                };
+              })
+              .sort((a, b) => a.date - b.date);
+
+            res.json({ result: true, activities: activitiesMapped });
+          } else {
+            res.json({ result: false, error: "No favorite activity found in database" });
+          }
+        });
+    } else {
+      res.json({ result: false, error: "User not found" });
+    }
   });
-});*/
+});
 
 // Update activity
 router.post("/update/:id", (req, res) => {
