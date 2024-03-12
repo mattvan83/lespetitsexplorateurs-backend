@@ -65,9 +65,9 @@ router.get("/nogeoloc/:token", (req, res) => {
               .map((activity) => {
                 return {
                   id: activity._id,
-                  imgUrl: activity.image,
+                  imgUrl: activity.imgUrl,
                   organizer: activity.organizer.organizerDetails.name,
-                  organizerImgUrl: activity.organizer.image,
+                  organizerImgUrl: activity.organizer.imgUrl,
                   organizerId: activity.organizer._id,
                   date: activity.date,
                   name: activity.name,
@@ -229,9 +229,9 @@ router.post("/nogeoloc", (req, res) => {
 
                 return {
                   id: activity._id,
-                  imgUrl: activity.image,
+                  imgUrl: activity.imgUrl,
                   organizer: activity.organizer.organizerDetails.name,
-                  organizerImgUrl: activity.organizer.image,
+                  organizerImgUrl: activity.organizer.imgUrl,
                   date: activity.date,
                   name: activity.name,
                   postalCode: activity.postalCode,
@@ -423,9 +423,9 @@ router.post("/geoloc", (req, res) => {
 
               return {
                 id: activity._id,
-                imgUrl: activity.image,
+                imgUrl: activity.imgUrl,
                 organizer: activity.organizer.organizerDetails.name,
-                organizerImgUrl: activity.organizer.image,
+                organizerImgUrl: activity.organizer.imgUrl,
                 organizerId: activity.organizer._id,
                 date: activity.date,
                 name: activity.name,
@@ -523,7 +523,8 @@ router.get("/:id", (req, res) => {
           locationName: activity.locationName,
           date: activity.date,
           duration: activity.durationInMilliseconds,
-          imgUrl: activity.image,
+          imgUrl: activity.imgUrl,
+          price: activity.price,
         },
       });
     } else {
@@ -542,17 +543,25 @@ router.get("/allactivities/:token", (req, res) => {
         .populate("organizer")
         .then((activities) => {
           if (activities.length) {
+            console.log(activities)
             const activitiesMapped = activities
               .map((activity) => {
                 return {
                   id: activity._id,
-                  imgUrl: activity.image,
+                  imgUrl: activity.imgUrl,
+                  description: activity.description,
+                  category: activity.category,
+                  concernedAges: activity.concernedAges,
+                  price: activity.price,
+                  durationInMilliseconds: activity.durationInMilliseconds,
                   organizer: activity.organizer.organizerDetails.name,
-                  organizerImgUrl: activity.organizer.image,
+                  organizerImgUrl: activity.organizer.imgUrl,
                   date: activity.date,
                   name: activity.name,
+                  address: activity.address,
                   postalCode: activity.postalCode,
                   city: activity.city,
+                  locationName: activity.locationName,
                   isLiked: activity.likes.includes(userId),
                 };
               })
@@ -635,13 +644,13 @@ router.post("/newActivity/:token", (req, res) => {
         address: req.body.address,
         postalCode: req.body.postalCode,
         locationName: req.body.locationName,
-        //latitude: req.body.latitude,
-        //longitude: req.body.longitude,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
         city: req.body.city,
         date: req.body.date,
+        price: req.body.price,
         //isRecurrent: req.body.isRecurrent,
         //recurrence: req.body.recurrence,
-        // image: req.body.image,
       });
 
       newActivity.save().then((activity) => {
@@ -677,7 +686,7 @@ router.post("/newPhoto/:id", async (req, res) => {
           { _id: data._id },
           {
             $set: {
-              image: resultCloudinary.secure_url,
+              imgUrl: resultCloudinary.secure_url,
             },
           }
         ).then((data) => {
@@ -774,7 +783,7 @@ router.get("/favorite/:token", (req, res) => {
 });
 
 // Update activity
-router.post("/update/:id", (req, res) => {
+router.put("/update", (req, res) => {
   if (!checkBody(req.body, ["token"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
@@ -785,7 +794,7 @@ router.post("/update/:id", (req, res) => {
       res.json({ result: false, error: "User not found" });
       return;
     }
-    Activity.findById(req.params.id)
+    Activity.findById(req.body.id)
       .populate("author")
       .then((activity) => {
         if (!activity) {
@@ -812,13 +821,13 @@ router.post("/update/:id", (req, res) => {
               address: req.body.address,
               postalCode: req.body.postalCode,
               locationName: req.body.locationName,
-              //latitude: req.body.latitude,
-              //longitude: req.body.longitude,
+              latitude: req.body.latitude,
+              longitude: req.body.longitude,
+              price: req.body.price,
               city: req.body.city,
               date: req.body.date,
               //isRecurrent: req.body.isRecurrent,
               //recurrence: req.body.recurrence,
-              // image: req.body.image,
             },
           }
         ).then((data) => {

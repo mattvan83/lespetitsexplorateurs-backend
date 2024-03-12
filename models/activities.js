@@ -42,7 +42,7 @@ const activitySchema = mongoose.Schema({
     enum: ["Daily", "Weekly", "Bimonthly", "Monthly", "Yearly"],
     // default: "",
   },
-  image: {
+  imgUrl: {
     type: String,
     default: "",
   },
