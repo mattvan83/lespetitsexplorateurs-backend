@@ -547,12 +547,18 @@ router.get("/allactivities/:token", (req, res) => {
                 return {
                   id: activity._id,
                   imgUrl: activity.image,
+                  description: activity.description,
+                  category: activity.category,
+                  concernedAges: activity.concernedAges,
+                  price: activity.price,
+                  durationInMilliseconds: activity.durationInMilliseconds,
                   organizer: activity.organizer.organizerDetails.name,
                   organizerImgUrl: activity.organizer.image,
                   date: activity.date,
                   name: activity.name,
                   postalCode: activity.postalCode,
                   city: activity.city,
+                  locationName: activity.locationName,
                   isLiked: activity.likes.includes(userId),
                 };
               })

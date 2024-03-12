@@ -6,7 +6,7 @@ const { convertCoordsToKm } = require("../modules/computeDistance");
 const { checkBody } = require('../modules/checkBody');
 
 // GET organizer by Id
-router.get("/:id", (req, res) => {
+router.get("/byId/:id", (req, res) => {
     User.findById( req.params.id)
     .populate("organizerDetails.activities")
     .select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities').then((data) => {
@@ -30,7 +30,8 @@ router.get("/:id", (req, res) => {
 router.get("/nogeoloc", (req, res) => {
     User.find({ isOrganizer: true })
     .populate("organizerDetails.activities")
-    .select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities').then((data) => {
+    .select('_id image organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities')
+    .then((data) => {
         if (data) {
             const organizers = data.map(organizer => {
                 return {
