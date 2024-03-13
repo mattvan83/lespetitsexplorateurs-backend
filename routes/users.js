@@ -117,7 +117,7 @@ router.post('/newOrganizer/:token', async (req, res) => {
                 isOrganizer: true,
                 'organizerDetails.name': name,
                 'organizerDetails.title': title,
-                'organizerDetails.About': about,
+                'organizerDetails.about': about,
                 'organizerDetails.postalCode': postalCode,
                 'organizerDetails.city': city,
                 'organizerDetails.address': address,

@@ -190,6 +190,7 @@ router.post("/nogeoloc", (req, res) => {
                   locationName: activity.locationName,
                   concernedAges: frontConcernedAges,
                   category: frontCategory,
+                  price: activity.price,
                   durationInMilliseconds: activity.durationInMilliseconds,
                 };
               })
@@ -395,6 +396,7 @@ router.post("/geoloc", (req, res) => {
                 locationName: activity.locationName,
                 concernedAges: frontConcernedAges,
                 category: frontCategory,
+                price: activity.price,
                 durationInMilliseconds: activity.durationInMilliseconds,
               };
             });
