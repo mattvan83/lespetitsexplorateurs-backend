@@ -49,6 +49,8 @@ const momentMapping = {
   Soir: "Evening",
 };
 
+const backToFrontErrorMapping = {};
+
 router.post("/nogeoloc", (req, res) => {
   if (!checkBody(req.body, ["token"])) {
     res.json({ result: false, error: "Missing or empty fields" });
@@ -234,12 +236,16 @@ router.post("/nogeoloc", (req, res) => {
           } else {
             res.json({
               result: false,
-              error: "No activity found in database",
+              error:
+                "Aucune activité trouvée avec les critères utilisés dans la base de données",
             });
           }
         });
     } else {
-      res.json({ result: false, error: "User not found" });
+      res.json({
+        result: false,
+        error: "Utilisateur non identifié en base de données",
+      });
     }
   });
 });
@@ -436,18 +442,22 @@ router.post("/geoloc", (req, res) => {
             } else {
               res.json({
                 result: false,
-                error: `No activity found at less than ${req.body.scope} kms`,
+                error: `Aucune activité trouvée avec les critères utilisés à moins de ${req.body.scope} kms dans la base de données`,
               });
             }
           } else {
             res.json({
               result: false,
-              error: "No activity found in database",
+              error:
+                "Aucune activité trouvée avec les critères utilisés dans la base de données",
             });
           }
         });
     } else {
-      res.json({ result: false, error: "User not found" });
+      res.json({
+        result: false,
+        error: "Utilisateur non identifié en base de données",
+      });
     }
   });
 });
