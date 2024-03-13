@@ -31,24 +31,30 @@ router.get("/byId/:id", (req, res) => {
 router.get("/nogeoloc", (req, res) => {
   User.find({ isOrganizer: true })
     .populate("organizerDetails.activities")
-    .select(
-      "_id imgUrl organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities"
-    )
+    // .select(
+    //   "_id imgUrl organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities"
+    // )
     .then((data) => {
-      if (data) {
-        const organizers = data.map((organizer) => {
-          return {
-            id: organizer._id,
-            imgUrl: organizer.imgUrl,
-            name: organizer.organizerDetails.name,
-            title: organizer.organizerDetails.title,
-            about: organizer.organizerDetails.about,
-            activities: organizer.organizerDetails.activities,
-          };
-        });
+      if (data.length) {
+        const organizers = data
+          .map((organizer) => {
+            return {
+              id: organizer._id,
+              imgUrl: organizer.imgUrl,
+              name: organizer.organizerDetails.name,
+              title: organizer.organizerDetails.title,
+              about: organizer.organizerDetails.about,
+              activities: organizer.organizerDetails.activities,
+              createdAt: organizer.createdAt,
+            };
+          })
+          .sort((a, b) => b.createdAt - a.createdAt);
         res.json({ result: true, organizers: organizers });
       } else {
-        res.json({ result: false, error: "No results" });
+        res.json({
+          result: false,
+          error: "Aucun organisateur trouvé dans la base de données",
+        });
       }
     });
 });
@@ -64,7 +70,7 @@ router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
     .populate("organizerDetails.activities")
     // .select('_id imgUrl organizerDetails.name organizerDetails.title organizerDetails.about organizerDetails.activities organizerDetails.longitude organizerDetails.latitude')
     .then((data) => {
-      if (data) {
+      if (data.length) {
         const organizers = data.map((organizer) => {
           return {
             id: organizer._id,
@@ -92,9 +98,24 @@ router.get("/geoloc/:preferenceRadius/:longitude/:latitude", (req, res) => {
           (organizer) => organizer.distance <= req.params.preferenceRadius
         );
 
-        res.json({ result: true, organizers: organizersFiltered });
+        if (organizersFiltered.length) {
+          res.json({
+            result: true,
+            organizers: organizersFiltered.sort(
+              (a, b) => a.distance - b.distance
+            ),
+          });
+        } else {
+          res.json({
+            result: false,
+            error: `Aucun organisateur trouvé à moins de ${req.params.preferenceRadius} KM dans la base de données`,
+          });
+        }
       } else {
-        res.json({ result: false, error: "No results" });
+        res.json({
+          result: false,
+          error: "Aucun organisateur trouvé dans la base de données",
+        });
       }
     });
 });

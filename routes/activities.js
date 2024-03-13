@@ -237,7 +237,7 @@ router.post("/nogeoloc", (req, res) => {
             res.json({
               result: false,
               error:
-                "Aucune activité trouvée avec les critères utilisés dans la base de données",
+                "Aucune activité trouvée avec les filtres utilisés dans la base de données",
             });
           }
         });
@@ -442,14 +442,14 @@ router.post("/geoloc", (req, res) => {
             } else {
               res.json({
                 result: false,
-                error: `Aucune activité trouvée avec les critères utilisés à moins de ${req.body.scope} kms dans la base de données`,
+                error: `Aucune activité trouvée avec les filtres utilisés et à moins de ${req.body.scope} KM dans la base de données`,
               });
             }
           } else {
             res.json({
               result: false,
               error:
-                "Aucune activité trouvée avec les critères utilisés dans la base de données",
+                "Aucune activité trouvée avec les filtres utilisés dans la base de données",
             });
           }
         });
