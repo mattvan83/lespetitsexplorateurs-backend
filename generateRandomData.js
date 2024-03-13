@@ -88,7 +88,7 @@ const organizersExamples = [
   },
   {
     imgUrl: "",
-    organizerName: "",
+    organizerName: "SOU de St Donat",
   },
 ];
 // // Replace 'your-api-key' with your OpenCage Geocoding API key
