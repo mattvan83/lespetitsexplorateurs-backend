@@ -18,6 +18,8 @@ router.post('/signup', (req, res) => {
     return;
   }
 
+  const createdAt = new Date();
+
   // Check if the user has not already been registered
   User.findOne({
     // Check if the username OR the email already exist
@@ -30,6 +32,7 @@ router.post('/signup', (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newUser = new User({
+        createdAt,
         email: req.body.email,
         username: req.body.username,
         password: hash,
