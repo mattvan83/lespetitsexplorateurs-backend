@@ -18,6 +18,8 @@ router.post('/signup', (req, res) => {
     return;
   }
 
+  const createdAt = new Date();
+
   // Check if the user has not already been registered
   User.findOne({
     // Check if the username OR the email already exist
@@ -30,6 +32,7 @@ router.post('/signup', (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newUser = new User({
+        createdAt,
         email: req.body.email,
         username: req.body.username,
         password: hash,
@@ -116,8 +119,8 @@ router.post('/newOrganizer/:token', async (req, res) => {
               $set: {
                 isOrganizer: true,
                 'organizerDetails.name': name,
-                'organizerDetails.function': title,
-                'organizerDetails.About': about,
+                'organizerDetails.title': title,
+                'organizerDetails.about': about,
                 'organizerDetails.postalCode': postalCode,
                 'organizerDetails.city': city,
                 'organizerDetails.address': address,
@@ -152,7 +155,7 @@ router.post('/newOrganizerPhoto/:token', async (req, res) => {
           User.updateOne({ token: req.params.token },
             {
               $set: {
-                image: resultCloudinary.secure_url,
+                imgUrl: resultCloudinary.secure_url,
               }
             })
             .then(data => {

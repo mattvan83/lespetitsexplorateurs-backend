@@ -6,7 +6,7 @@ const { convertCoordsToKm } = require("../modules/computeDistance");
 const { checkBody } = require("../modules/checkBody");
 
 // GET organizer by Id
-router.get("/byId/:id", (req, res) => {
+router.get("/byId/:id/:longitude/:latitude", (req, res) => {
   User.findById(req.params.id)
     .populate("organizerDetails.activities")
     .then((data) => {
