@@ -587,7 +587,7 @@ router.post("/newActivity/:token", (req, res) => {
         createdAt,
         name: req.body.name,
         description: req.body.description,
-        //durationInMilliseconds: req.body.duration,
+        durationInMilliseconds: req.body.durationInMilliseconds,
         category: categoryMapping[req.body.category],
         concernedAges: ages,
         address: req.body.address,
@@ -772,7 +772,7 @@ router.put("/update", (req, res) => {
             $set: {
               name: req.body.name,
               description: req.body.description,
-              //durationInMilliseconds: req.body.duration,
+              durationInMilliseconds: req.body.durationInMilliseconds,
               category: categoryMapping[req.body.category],
               concernedAges: ageMapping[req.body.concernedAges],
               address: req.body.address,
