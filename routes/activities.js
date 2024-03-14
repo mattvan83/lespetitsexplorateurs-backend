@@ -224,17 +224,10 @@ router.post("/nogeoloc", (req, res) => {
               }
             });
 
-            if (activitiesFiltered.length > 15) {
-              res.json({
-                result: true,
-                activities: activitiesFiltered.slice(0, 15),
-              });
-            } else {
-              res.json({
-                result: true,
-                activities: activitiesFiltered,
-              });
-            }
+            res.json({
+              result: true,
+              activities: activitiesFiltered,
+            });
           } else {
             res.json({
               result: false,
