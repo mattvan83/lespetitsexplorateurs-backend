@@ -203,6 +203,7 @@ router.post("/nogeoloc", (req, res) => {
                 const targetHours = determineTargetHours(
                   userFiltersCleaned.momentFilter
                 );
+                // console.log("targetHours: ", targetHours);
                 const activityHour = activity.date.getHours();
 
                 if (targetHours.length === 1) {
@@ -412,6 +413,7 @@ router.post("/geoloc", (req, res) => {
                 const targetHours = determineTargetHours(
                   userFiltersCleaned.momentFilter
                 );
+                // console.log("targetHours: ", targetHours);
                 const activityHour = activity.date.getHours();
 
                 if (targetHours.length === 1) {
@@ -720,10 +722,12 @@ router.get("/favorite/:userId", async (req, res) => {
   }
 
   const userId = user._id;
-  const activities = await Activity.find({ likes: { $in: [userId] } }).populate("organizer");
+  const activities = await Activity.find({ likes: { $in: [userId] } }).populate(
+    "organizer"
+  );
 
   if (activities.length > 0) {
-    const activitiesMapped = activities.map(activity => ({
+    const activitiesMapped = activities.map((activity) => ({
       id: activity._id,
       imgUrl: activity.image,
       organizer: activity.organizer.organizerDetails.name,
@@ -737,7 +741,10 @@ router.get("/favorite/:userId", async (req, res) => {
 
     res.json({ result: true, activities: activitiesMapped });
   } else {
-    res.json({ result: false, error: "No favorite activity found in database" });
+    res.json({
+      result: false,
+      error: "No favorite activity found in database",
+    });
   }
 });
 

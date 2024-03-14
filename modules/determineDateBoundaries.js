@@ -181,6 +181,8 @@ const determineTargetHours = (momentFilter) => {
       [0, 12],
       [18, 24],
     ];
+  } else if (arraysHaveSameElements(momentFilter, ["Afternoon", "Evening"])) {
+    return [[12, 24]];
   } else if (
     arraysHaveSameElements(momentFilter, ["Morning", "Afternoon", "Evening"])
   ) {
