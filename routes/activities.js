@@ -614,10 +614,20 @@ router.post("/newActivity/:token", (req, res) => {
 
       newActivity.save().then((activity) => {
         if (activity) {
-          res.json({
-            result: true,
-            activity,
+          console.log(activity)
+          //Update of the user activities if user is an organizer
+          User.updateOne({ token: req.params.token }, { $push: { 'organizerDetails.activities': activity._id }})
+          .then((data) => {
+            if (data) {
+              res.json({result: true, data});
+            } else {
+              res.json({
+                result: false,
+                error: "An error occured while adding activity to organizer's profile",
+              });
+            }
           });
+
         } else {
           res.json({
             result: false,
