@@ -203,6 +203,7 @@ router.post("/nogeoloc", (req, res) => {
                 const targetHours = determineTargetHours(
                   userFiltersCleaned.momentFilter
                 );
+                // console.log("targetHours: ", targetHours);
                 const activityHour = activity.date.getHours();
 
                 if (targetHours.length === 1) {
@@ -223,17 +224,10 @@ router.post("/nogeoloc", (req, res) => {
               }
             });
 
-            if (activitiesFiltered.length > 15) {
-              res.json({
-                result: true,
-                activities: activitiesFiltered.slice(0, 15),
-              });
-            } else {
-              res.json({
-                result: true,
-                activities: activitiesFiltered,
-              });
-            }
+            res.json({
+              result: true,
+              activities: activitiesFiltered,
+            });
           } else {
             res.json({
               result: false,
@@ -412,6 +406,7 @@ router.post("/geoloc", (req, res) => {
                 const targetHours = determineTargetHours(
                   userFiltersCleaned.momentFilter
                 );
+                // console.log("targetHours: ", targetHours);
                 const activityHour = activity.date.getHours();
 
                 if (targetHours.length === 1) {
@@ -566,21 +561,21 @@ router.delete("/", (req, res) => {
         }
 
         Activity.deleteOne({ _id: activity._id }).then(() => {
-
           //Delete of the user activities if user is an organizer
-          User.updateOne({ token: req.body.token }, { $pull: { 'organizerDetails.activities': activity._id } })
-            .then((data) => {
-              if (data) {
-                res.json({ result: true, activityId: activity._id });
-              } else {
-                res.json({
-                  result: false,
-                  error: "An error occured while adding activity to organizer's profile",
-                });
-              }
-            });
-
-          
+          User.updateOne(
+            { token: req.body.token },
+            { $pull: { "organizerDetails.activities": activity._id } }
+          ).then((data) => {
+            if (data) {
+              res.json({ result: true, activityId: activity._id });
+            } else {
+              res.json({
+                result: false,
+                error:
+                  "An error occured while adding activity to organizer's profile",
+              });
+            }
+          });
         });
       });
   });
@@ -629,18 +624,20 @@ router.post("/newActivity/:token", (req, res) => {
       newActivity.save().then((activity) => {
         if (activity) {
           //Update of the user activities if user is an organizer
-          User.updateOne({ token: req.params.token }, { $push: { 'organizerDetails.activities': activity._id } })
-            .then((data) => {
-              if (data) {
-                res.json({ result: true, activity });
-              } else {
-                res.json({
-                  result: false,
-                  error: "An error occured while adding activity to organizer's profile",
-                });
-              }
-            });
-
+          User.updateOne(
+            { token: req.params.token },
+            { $push: { "organizerDetails.activities": activity._id } }
+          ).then((data) => {
+            if (data) {
+              res.json({ result: true, activity });
+            } else {
+              res.json({
+                result: false,
+                error:
+                  "An error occured while adding activity to organizer's profile",
+              });
+            }
+          });
         } else {
           res.json({
             result: false,
@@ -737,7 +734,7 @@ router.put("/favorite/:token/:activityId", (req, res) => {
             city: activity.city,
             price: activity.price,
             //isLiked: true,
-          }
+          };
           res.json({
             result: true,
             message: "Activity liked or unliked successfully",
@@ -753,41 +750,43 @@ router.put("/favorite/:token/:activityId", (req, res) => {
 
 // GET the favorite activities of the user
 router.get("/allfavorites/:token", async (req, res) => {
-  User.findOne({ token: req.params.token })
-    .then((data) => {
-      if (!data) {
-        throw new Error("User not found");
-      }
+  User.findOne({ token: req.params.token }).then((data) => {
+    if (!data) {
+      throw new Error("User not found");
+    }
 
     Activity.find({ likes: { $in: [data._id] } })
-    .populate("organizer")
-    .then((activity) => {
-      if (!activity) {
-        return res.json({ message: "Activity not found" });
-      }
-    if (activity.length > 0) {
-      const activitiesMapped = activity.map(activity => ({
-        id: activity._id,
-        imgUrl: activity.imgUrl,
-        organizer: activity.organizer.organizerDetails.name,
-        organizerImgUrl: activity.organizer.imgUrl,
-        date: activity.date,
-        durationInMilliseconds: activity.durationInMilliseconds,
-        name: activity.name,
-        description: activity.description,
-        locationName: activity.locationName,
-        postalCode: activity.postalCode,
-        city: activity.city,
-        price: activity.price,
-        //isLiked: true,
-      }));
+      .populate("organizer")
+      .then((activity) => {
+        if (!activity) {
+          return res.json({ message: "Activity not found" });
+        }
+        if (activity.length > 0) {
+          const activitiesMapped = activity.map((activity) => ({
+            id: activity._id,
+            imgUrl: activity.imgUrl,
+            organizer: activity.organizer.organizerDetails.name,
+            organizerImgUrl: activity.organizer.imgUrl,
+            date: activity.date,
+            durationInMilliseconds: activity.durationInMilliseconds,
+            name: activity.name,
+            description: activity.description,
+            locationName: activity.locationName,
+            postalCode: activity.postalCode,
+            city: activity.city,
+            price: activity.price,
+            //isLiked: true,
+          }));
 
-      res.json({ result: true, activities: activitiesMapped });
-    } else {
-      res.json({ result: false, error: "No favorite activity found in database" });
-    }
+          res.json({ result: true, activities: activitiesMapped });
+        } else {
+          res.json({
+            result: false,
+            error: "No favorite activity found in database",
+          });
+        }
+      });
   });
-});
 });
 
 // Update activity
