@@ -566,7 +566,21 @@ router.delete("/", (req, res) => {
         }
 
         Activity.deleteOne({ _id: activity._id }).then(() => {
-          res.json({ result: true, activityId: activity._id });
+
+          //Delete of the user activities if user is an organizer
+          User.updateOne({ token: req.body.token }, { $pull: { 'organizerDetails.activities': activity._id } })
+            .then((data) => {
+              if (data) {
+                res.json({ result: true, activityId: activity._id });
+              } else {
+                res.json({
+                  result: false,
+                  error: "An error occured while adding activity to organizer's profile",
+                });
+              }
+            });
+
+          
         });
       });
   });
@@ -614,19 +628,18 @@ router.post("/newActivity/:token", (req, res) => {
 
       newActivity.save().then((activity) => {
         if (activity) {
-          console.log(activity)
           //Update of the user activities if user is an organizer
-          User.updateOne({ token: req.params.token }, { $push: { 'organizerDetails.activities': activity._id }})
-          .then((data) => {
-            if (data) {
-              res.json({result: true, data});
-            } else {
-              res.json({
-                result: false,
-                error: "An error occured while adding activity to organizer's profile",
-              });
-            }
-          });
+          User.updateOne({ token: req.params.token }, { $push: { 'organizerDetails.activities': activity._id } })
+            .then((data) => {
+              if (data) {
+                res.json({ result: true, activity });
+              } else {
+                res.json({
+                  result: false,
+                  error: "An error occured while adding activity to organizer's profile",
+                });
+              }
+            });
 
         } else {
           res.json({
