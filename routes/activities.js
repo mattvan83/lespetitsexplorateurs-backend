@@ -674,13 +674,14 @@ router.put("/favorite/:token/:activityId", (req, res) => {
   User.findOne({ token: req.params.token })
     .then((data) => {
       if (!data) {
-        throw new Error("User not found"); // Rejet de la promesse si aucun utilisateur n'est trouvé
+        throw new Error("User not found");
       }
 
       const activityId = req.params.activityId;
       let isLiked;
 
       Activity.findById(activityId)
+        .populate("organizer")
         .then((activity) => {
           if (!activity) {
             return res.json({ message: "Activity not found" });
@@ -698,11 +699,26 @@ router.put("/favorite/:token/:activityId", (req, res) => {
 
           return activity.save();
         })
-        .then((updatedActivity) => {
+        .then((activity) => {
+          const updatedActivity = {
+            id: activity._id,
+            imgUrl: activity.imgUrl,
+            organizer: activity.organizer.organizerDetails.name,
+            organizerImgUrl: activity.organizer.imgUrl,
+            date: activity.date,
+            durationInMilliseconds: activity.durationInMilliseconds,
+            name: activity.name,
+            description: activity.description,
+            locationName: activity.locationName,
+            postalCode: activity.postalCode,
+            city: activity.city,
+            price: activity.price,
+            //isLiked: true,
+          }
           res.json({
             result: true,
             message: "Activity liked or unliked successfully",
-            activityId: updatedActivity._id,
+            activity: updatedActivity,
           });
         });
     })
@@ -713,32 +729,42 @@ router.put("/favorite/:token/:activityId", (req, res) => {
 });
 
 // GET the favorite activities of the user
-router.get("/favorite/:userId", async (req, res) => {
-  const user = await User.findById(req.params.userId);
-  if (!user) {
-    return res.json({ result: false, error: "User not found" });
-  }
+router.get("/allfavorites/:token", async (req, res) => {
+  User.findOne({ token: req.params.token })
+    .then((data) => {
+      if (!data) {
+        throw new Error("User not found");
+      }
 
-  const userId = user._id;
-  const activities = await Activity.find({ likes: { $in: [userId] } }).populate("organizer");
+    Activity.find({ likes: { $in: [data._id] } })
+    .populate("organizer")
+    .then((activity) => {
+      if (!activity) {
+        return res.json({ message: "Activity not found" });
+      }
+    if (activity.length > 0) {
+      const activitiesMapped = activity.map(activity => ({
+        id: activity._id,
+        imgUrl: activity.imgUrl,
+        organizer: activity.organizer.organizerDetails.name,
+        organizerImgUrl: activity.organizer.imgUrl,
+        date: activity.date,
+        durationInMilliseconds: activity.durationInMilliseconds,
+        name: activity.name,
+        description: activity.description,
+        locationName: activity.locationName,
+        postalCode: activity.postalCode,
+        city: activity.city,
+        price: activity.price,
+        //isLiked: true,
+      }));
 
-  if (activities.length > 0) {
-    const activitiesMapped = activities.map(activity => ({
-      id: activity._id,
-      imgUrl: activity.image,
-      organizer: activity.organizer.organizerDetails.name,
-      organizerImgUrl: activity.organizer.image,
-      date: activity.date,
-      name: activity.name,
-      postalCode: activity.postalCode,
-      city: activity.city,
-      isLiked: true,
-    }));
-
-    res.json({ result: true, activities: activitiesMapped });
-  } else {
-    res.json({ result: false, error: "No favorite activity found in database" });
-  }
+      res.json({ result: true, activities: activitiesMapped });
+    } else {
+      res.json({ result: false, error: "No favorite activity found in database" });
+    }
+  });
+});
 });
 
 // Update activity
