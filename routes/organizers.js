@@ -7,12 +7,12 @@ const { checkBody } = require("../modules/checkBody");
 
 // GET organizer by Id
 router.get("/byId/:id", (req, res) => {
-// router.get("/byId/:id/:longitude/:latitude", (req, res) => {
+  // router.get("/byId/:id/:longitude/:latitude", (req, res) => {
   User.findById(req.params.id)
     .populate("organizerDetails.activities")
     .then((data) => {
       if (data) {
-        console.log(data);
+        // console.log(data);
         const organizer = {
           id: data._id,
           imgUrl: data.imgUrl,
