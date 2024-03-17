@@ -199,6 +199,8 @@ router.post("/nogeoloc", (req, res) => {
               .sort((a, b) => a.date - b.date);
 
             const activitiesFiltered = activitiesMapped.filter((activity) => {
+              const currentDate = new Date();
+
               if (userFiltersCleaned.momentFilter) {
                 const targetHours = determineTargetHours(
                   userFiltersCleaned.momentFilter
@@ -208,19 +210,21 @@ router.post("/nogeoloc", (req, res) => {
 
                 if (targetHours.length === 1) {
                   return (
+                    activity.date >= currentDate &&
                     activityHour >= targetHours[0][0] &&
                     activityHour < targetHours[0][1]
                   );
                 } else if (targetHours.length === 2) {
                   return (
-                    (activityHour >= targetHours[0][0] &&
+                    activity.date >= currentDate &&
+                    ((activityHour >= targetHours[0][0] &&
                       activityHour < targetHours[0][1]) ||
-                    (activityHour >= targetHours[1][0] &&
-                      activityHour < targetHours[1][1])
+                      (activityHour >= targetHours[1][0] &&
+                        activityHour < targetHours[1][1]))
                   );
                 }
               } else {
-                return true;
+                return activity.date >= currentDate;
               }
             });
 
@@ -402,6 +406,8 @@ router.post("/geoloc", (req, res) => {
             });
 
             const activitiesFiltered = activitiesMapped.filter((activity) => {
+              const currentDate = new Date();
+
               if (userFiltersCleaned.momentFilter) {
                 const targetHours = determineTargetHours(
                   userFiltersCleaned.momentFilter
@@ -412,12 +418,14 @@ router.post("/geoloc", (req, res) => {
                 if (targetHours.length === 1) {
                   return (
                     activity.distance <= req.body.scope &&
+                    activity.date >= currentDate &&
                     activityHour >= targetHours[0][0] &&
                     activityHour < targetHours[0][1]
                   );
                 } else if (targetHours.length === 2) {
                   return (
                     activity.distance <= req.body.scope &&
+                    activity.date >= currentDate &&
                     ((activityHour >= targetHours[0][0] &&
                       activityHour < targetHours[0][1]) ||
                       (activityHour >= targetHours[1][0] &&
@@ -425,16 +433,24 @@ router.post("/geoloc", (req, res) => {
                   );
                 }
               } else {
-                return activity.distance <= req.body.scope;
+                return (
+                  activity.distance <= req.body.scope &&
+                  activity.date >= currentDate
+                );
               }
             });
 
             if (activitiesFiltered.length) {
               res.json({
                 result: true,
-                activities: activitiesFiltered.sort(
-                  (a, b) => a.distance - b.distance
-                ),
+                activities: activitiesFiltered.sort((a, b) => {
+                  // Sort by distance first
+                  if (a.distance !== b.distance) {
+                    return a.distance - b.distance;
+                  }
+                  // If distances are equal, sort by date
+                  return a.date - b.date;
+                }),
               });
             } else {
               res.json({
