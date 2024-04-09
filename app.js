@@ -11,9 +11,17 @@ var usersRouter = require("./routes/users");
 var activitiesRouter = require("./routes/activities");
 var organizersRouter = require("./routes/organizers");
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./swagger-output.json");
+const bodyParser = require("body-parser");
+
 var app = express();
 const fileUpload = require("express-fileupload");
 app.use(fileUpload());
+
+/* Middlewares */
+app.use(bodyParser.json());
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const cors = require("cors");
 app.use(cors());
